@@ -1,7 +1,9 @@
 package com.test.demo.features.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.test.demo.R
 import com.test.demo.databinding.ActivityMainBinding
@@ -23,6 +25,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         changeFragment(fragment, false)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 1) {
             supportFragmentManager.popBackStack()
@@ -33,10 +44,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     fun changeFragment(fragment: Fragment, addToBackStack: Boolean = true, name: String? = null) {
         supportFragmentManager.commit {
-            replace(R.id.fragment_container, fragment)
+            setReorderingAllowed(true)
+            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             if (addToBackStack) {
                 addToBackStack(name)
             }
+            replace(R.id.fragment_container, fragment)
         }
     }
 }

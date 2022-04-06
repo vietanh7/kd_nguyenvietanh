@@ -1,4 +1,4 @@
-package com.test.demo.features.product
+package com.test.demo.features.product.list
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,8 @@ import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.ProductListFragmentBinding
 import com.test.demo.features.base.BaseFragment
+import com.test.demo.features.main.MainActivity
+import com.test.demo.features.product.add.AddProductFragment
 import com.test.demo.utils.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,6 +34,8 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductListV
             productAdapter = ProductAdapter(this@ProductListFragment)
             productRc.adapter = productAdapter
             productRc.setHasFixedSize(true)
+
+            btnAdd.setOnClickListener { toAddProduct() }
         }
     }
 
@@ -40,6 +44,11 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductListV
         viewModel.listProduct.asLiveData().observe {
             productAdapter?.submitList(it)
         }
+    }
+
+    private fun toAddProduct() {
+        val mainActivity = activity as? MainActivity ?: return
+        mainActivity.changeFragment(AddProductFragment.newInstance(), true)
     }
 
     override fun onRefresh() {

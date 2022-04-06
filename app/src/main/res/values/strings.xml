@@ -5,4 +5,11 @@
     <string name="password">Password</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
+    <string name="add_product">Add new product</string>
+    <string name="sku">Sku</string>
+    <string name="product_name">Product name</string>
+    <string name="quantity">Quantity</string>
+    <string name="price">Price</string>
+    <string name="unit">Unit</string>
+    <string name="status">Status</string>
 </resources>

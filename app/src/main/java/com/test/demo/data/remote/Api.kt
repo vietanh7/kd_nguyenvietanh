@@ -5,6 +5,7 @@ import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
 import org.json.JSONObject
 import retrofit2.HttpException
+import retrofit2.http.Field
 import java.lang.Exception
 import java.util.concurrent.CancellationException
 
@@ -16,6 +17,8 @@ interface Api {
     suspend fun getListProduct(): List<Product>
 
     suspend fun deleteProduct(sku: String): Product
+
+    suspend fun addProduct(sku: String, productName: String, quantity: Int, price: Int, unit: String, status: Int, )
 }
 
 class ApiIml(private val apiService: ApiService): Api {
@@ -64,5 +67,16 @@ class ApiIml(private val apiService: ApiService): Api {
 
     override suspend fun deleteProduct(sku: String): Product {
         return wrapErrorCall { apiService.deleteProduct(sku) }
+    }
+
+    override suspend fun addProduct(
+        sku: String,
+        productName: String,
+        quantity: Int,
+        price: Int,
+        unit: String,
+        status: Int
+    ) {
+        return wrapErrorCall { apiService.addProduct(sku, productName, quantity, price, unit, status) }
     }
 }

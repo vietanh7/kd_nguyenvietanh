@@ -1,4 +1,4 @@
-package com.test.demo.features.product
+package com.test.demo.features.product.list
 
 import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.model.Product

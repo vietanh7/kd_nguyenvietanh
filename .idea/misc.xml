@@ -5,6 +5,7 @@
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3645833333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3380208333333333" />
+        <entry key="app/src/main/res/layout/add_product_fragment.xml" value="0.21348684210526317" />
         <entry key="app/src/main/res/layout/login_fragment.xml" value="0.3380208333333333" />
         <entry key="app/src/main/res/layout/product_item.xml" value="0.22" />
         <entry key="app/src/main/res/layout/product_list_fragment.xml" value="0.22" />

@@ -10,7 +10,7 @@ import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.base.Event
 import com.test.demo.features.main.MainActivity
-import com.test.demo.features.product.ProductListFragment
+import com.test.demo.features.product.list.ProductListFragment
 import com.test.demo.utils.setTextIfChanged
 import com.test.demo.utils.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,10 +26,6 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, LoginViewModel>(R.layout
     }
 
     private fun observeVm() {
-        viewModel.error().observe(viewLifecycleOwner) {
-            showMessage(it.message.orEmpty())
-        }
-
         viewModel.loading.observe(::handleLoading)
         viewModel.email.asLiveData().observe { binding.emailEdt.setTextIfChanged(it)}
         viewModel.password.asLiveData().observe { binding.passwordEdt.setTextIfChanged(it) }

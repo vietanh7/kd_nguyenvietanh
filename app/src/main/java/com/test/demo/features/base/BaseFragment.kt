@@ -22,6 +22,8 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
         viewModel.event().observe(viewLifecycleOwner) {
             onNewEvent(it)
         }
+
+        viewModel.error().observe { showMessage(it.message.orEmpty()) }
     }
 
     open fun onNewEvent(event: Event) {
@@ -32,7 +34,10 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
         val activity = activity as? BaseActivity<*> ?: return
         val displayBack = activity.supportFragmentManager.backStackEntryCount > 1
         activity.setSupportActionBar(toolbar)
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(displayBack)
+        activity.supportActionBar?.apply {
+            setDisplayShowHomeEnabled(displayBack)
+            setDisplayHomeAsUpEnabled(displayBack)
+        }
     }
 
     open fun showMessage(message: String) {

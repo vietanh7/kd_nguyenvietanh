@@ -1,4 +1,4 @@
-package com.test.demo.features.product
+package com.test.demo.features.product.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
