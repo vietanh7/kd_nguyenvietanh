@@ -2,7 +2,6 @@ package com.test.demo.features.login
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.asLiveData
@@ -10,6 +9,8 @@ import com.test.demo.R
 import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.base.Event
+import com.test.demo.features.main.MainActivity
+import com.test.demo.features.product.ProductListFragment
 import com.test.demo.utils.setTextIfChanged
 import com.test.demo.utils.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -43,7 +44,8 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, LoginViewModel>(R.layout
     override fun onNewEvent(event: Event) {
         when(event) {
             is LoginEvent.LoginSuccessEvent -> {
-                Toast.makeText(requireContext(), "Login success", Toast.LENGTH_SHORT).show()
+                val host = activity as? MainActivity ?: return
+                host.changeFragment(ProductListFragment.newInstance(), false)
             }
         }
 

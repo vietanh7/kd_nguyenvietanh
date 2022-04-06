@@ -1,8 +1,8 @@
-package com.test.demo.data
+package com.test.demo.data.remote
 
 import com.google.gson.Gson
 import com.test.demo.BuildConfig
-import com.test.demo.data.remote.ApiService
+import com.test.demo.data.local.PrefsHelper
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -14,13 +14,12 @@ private const val NETWORK_TIMEOUT = 20L
 
 val networkModule
     get() = module {
-        single { provideHttpClient(BuildConfig.DEBUG) }
+        single { provideHttpClient(BuildConfig.DEBUG, get()) }
         single { provideGson() }
         factory { provideRetrofitBuilder(get(), get()) }
 
         single { provideApiService(get()) }
     }
-
 
 private fun provideApiService(builder: Retrofit.Builder): ApiService {
     return builder.baseUrl(BuildConfig.BASE_URL)
@@ -38,7 +37,7 @@ private fun provideGson(): Gson {
     return Gson()
 }
 
-private fun provideHttpClient(enableLogging: Boolean): OkHttpClient {
+private fun provideHttpClient(enableLogging: Boolean, prefsHelper: PrefsHelper): OkHttpClient {
     val level = if (enableLogging)
         HttpLoggingInterceptor.Level.BODY
     else
@@ -50,6 +49,7 @@ private fun provideHttpClient(enableLogging: Boolean): OkHttpClient {
         .writeTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
         .readTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
         .callTimeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+        .addInterceptor(AuthorizationInterceptor(prefsHelper))
         .addInterceptor(HttpLoggingInterceptor().setLevel(level))
 
     return builder.build()

@@ -3,6 +3,7 @@ package com.test.demo.features.base
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -25,6 +26,13 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
 
     open fun onNewEvent(event: Event) {
 
+    }
+
+    fun setupToolbar(toolbar: Toolbar) {
+        val activity = activity as? BaseActivity<*> ?: return
+        val displayBack = activity.supportFragmentManager.backStackEntryCount > 1
+        activity.setSupportActionBar(toolbar)
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(displayBack)
     }
 
     open fun showMessage(message: String) {
