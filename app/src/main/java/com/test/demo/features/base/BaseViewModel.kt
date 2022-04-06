@@ -12,11 +12,14 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel : ViewModel() {
-    protected val loading = MutableStateFlow(false)
-    val isLoading = loading.asLiveData()
+    protected val isLoading = MutableStateFlow(false)
+    val loading = isLoading.asLiveData()
 
     protected val errorEvent = SingleLiveEvent<Throwable>()
     fun error(): LiveData<Throwable> = errorEvent
+
+    protected val event = SingleLiveEvent<Event>()
+    fun event(): LiveData<Event> = event
 
     fun launchJob(
         context: CoroutineContext = EmptyCoroutineContext,
@@ -34,11 +37,11 @@ abstract class BaseViewModel : ViewModel() {
         block: suspend CoroutineScope.() -> Unit
     ): Job {
         return viewModelScope.launch(context + errorHandler, start) {
-            loading.value = true
+            isLoading.value = true
             try {
                 block()
             } finally {
-                loading.value = false
+                isLoading.value = false
             }
         }
     }

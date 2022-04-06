@@ -2,6 +2,7 @@ package com.test.demo.data
 
 import com.google.gson.Gson
 import com.test.demo.BuildConfig
+import com.test.demo.data.remote.ApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -16,8 +17,16 @@ val networkModule
         single { provideHttpClient(BuildConfig.DEBUG) }
         single { provideGson() }
         factory { provideRetrofitBuilder(get(), get()) }
+
+        single { provideApiService(get()) }
     }
 
+
+private fun provideApiService(builder: Retrofit.Builder): ApiService {
+    return builder.baseUrl(BuildConfig.BASE_URL)
+        .build()
+        .create(ApiService::class.java)
+}
 
 private fun provideRetrofitBuilder(client: OkHttpClient, gson: Gson): Retrofit.Builder {
     return Retrofit.Builder()
