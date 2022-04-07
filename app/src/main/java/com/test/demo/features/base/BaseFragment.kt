@@ -54,8 +54,20 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
             .show()
     }
 
+    fun showMessageAndDo(message: String, action: Runnable) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Message")
+            .setMessage(message)
+            .setNeutralButton("Ok") { _, _ -> action.run() }
+            .show()
+    }
+
     fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    fun <T> hostActivity(): T? {
+        return activity as? T
     }
 
     fun <T> LiveData<T>.observe(observer: Observer<T>) {

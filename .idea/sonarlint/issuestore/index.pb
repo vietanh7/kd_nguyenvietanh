@@ -13,14 +13,10 @@ l
 <app/src/main/java/com/test/demo/features/login/LoginEvent.kt,d/3/d3dc22410e9a6b13b49121fbb7dc087c4b77c3b7
 i
 9app/src/main/java/com/test/demo/data/local/PrefsHelper.kt,0/5/05e91629675f16abb010fcd4ce646dcf630d0237
-b
-2app/src/main/java/com/test/demo/data/dataModule.kt,1/0/10ea12a27ca1af1e3a9e0aa3108f4628b21cea58
 m
 =app/src/main/java/com/test/demo/features/login/LoginModule.kt,e/8/e897f0883b7b7d4f65f4a3f2aeb70052e9f651bb
 i
 9app/src/main/java/com/test/demo/features/base/ListItem.kt,7/6/763ffd94e41ced5b4a72306599459171a477cae2
-u
-Eapp/src/main/java/com/test/demo/data/remote/model/RegisterResponse.kt,4/c/4c03485a20582c63e2153392e16658fa31aa135f
 i
 9app/src/main/java/com/test/demo/utils/ViewBindingUtils.kt,3/8/38f0106e8598d7570c3ecaa020cd77460a2118a6
 l
@@ -29,5 +25,3 @@ w
 Gapp/src/main/java/com/test/demo/data/remote/AuthorizationInterceptor.kt,b/a/ba581e62a3d3bd7b5c95045b9df412a4ef14d5e0
 w
 Gapp/src/main/java/com/test/demo/features/product/list/ProductAdapter.kt,e/d/ed1855413746b0f1a2eea528040a34aca49588fe
-Z
-*app/src/main/java/com/test/demo/DemoApp.kt,8/7/87c83117ad9c651e989e2f08d969ddea515d3ad0

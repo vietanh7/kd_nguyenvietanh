@@ -1,4 +1,4 @@
-package com.test.demo.features.login
+package com.test.demo.features.auth
 
 import android.os.Bundle
 import android.view.View
@@ -15,9 +15,9 @@ import com.test.demo.utils.setTextIfChanged
 import com.test.demo.utils.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LoginFragment: BaseFragment<LoginFragmentBinding, LoginViewModel>(R.layout.login_fragment) {
+class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.login_fragment) {
     override val binding by viewBinding { LoginFragmentBinding.bind(it) }
-    override val viewModel: LoginViewModel by viewModel()
+    override val viewModel: AuthViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,18 +28,18 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, LoginViewModel>(R.layout
     private fun observeVm() {
         viewModel.email.asLiveData().observe { binding.emailEdt.setTextIfChanged(it)}
         viewModel.password.asLiveData().observe { binding.passwordEdt.setTextIfChanged(it) }
-        viewModel.isOk.observe { binding.btnLogin.isEnabled = it }
+        viewModel.isOk.observe { binding.actionBtn.isEnabled = it }
     }
 
     override fun handleLoading(isLoading: Boolean) {
-        binding.btnLogin.isEnabled = !isLoading
+        binding.actionBtn.isEnabled = !isLoading
         binding.loadingIndicator.isVisible = isLoading
     }
 
     override fun onNewEvent(event: Event) {
         when(event) {
-            is LoginEvent.LoginSuccessEvent -> {
-                val host = activity as? MainActivity ?: return
+            is AuthEvent.LoginSuccessEvent -> {
+                val host = hostActivity<MainActivity>() ?: return
                 host.changeFragment(ProductListFragment.newInstance(), false)
             }
         }
@@ -49,9 +49,16 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, LoginViewModel>(R.layout
 
     private fun setup() {
         with(binding) {
-            btnLogin.setOnClickListener { viewModel.login() }
+            title.setText(R.string.login)
+            actionBtn.setText(R.string.login)
+            navigationText.setText(R.string.register)
+            actionBtn.setOnClickListener { viewModel.login() }
             emailEdt.doAfterTextChanged { viewModel.email.value = it?.toString().orEmpty() }
             passwordEdt.doAfterTextChanged { viewModel.password.value = it?.toString().orEmpty() }
+            navigationText.setOnClickListener {
+                val activity = hostActivity<MainActivity>() ?: return@setOnClickListener
+                activity.changeFragment(RegisterFragment.newInstance(), false)
+            }
         }
     }
 

@@ -16,8 +16,11 @@ data class RegisterResponse(
     data class Data(
         @SerializedName("created_at")
         val createdAt: String,
+        @SerializedName("email")
         val email: String,
+        @SerializedName("id")
         val id: Int,
+        @SerializedName("update_at")
         val updatedAt: String
     )
 }

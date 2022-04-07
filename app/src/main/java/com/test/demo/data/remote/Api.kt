@@ -1,11 +1,12 @@
 package com.test.demo.data.remote
 
+import com.test.demo.data.remote.Api.Companion.TOKEN_EXPIRED_MESSAGE
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
+import com.test.demo.dispatcher.TokenExpiredDispatcher
 import org.json.JSONObject
 import retrofit2.HttpException
-import java.lang.Exception
 import java.util.concurrent.CancellationException
 
 interface Api {
@@ -17,12 +18,33 @@ interface Api {
 
     suspend fun deleteProduct(sku: String): Product
 
-    suspend fun addProduct(sku: String, productName: String, quantity: Int, price: Int, unit: String, status: Int): Product
+    suspend fun addProduct(
+        sku: String,
+        productName: String,
+        quantity: Int,
+        price: Int,
+        unit: String,
+        status: Int
+    ): Product
 
-    suspend fun updateProduct(sku: String, productName: String, quantity: Int, price: Int, unit: String, status: Int): Product
+    suspend fun updateProduct(
+        sku: String,
+        productName: String,
+        quantity: Int,
+        price: Int,
+        unit: String,
+        status: Int
+    ): Product
+
+    companion object {
+        const val TOKEN_EXPIRED_MESSAGE = "Provided token is expired."
+    }
 }
 
-class ApiIml(private val apiService: ApiService): Api {
+class ApiIml(
+    private val apiService: ApiService,
+    private val tokenExpiredDispatcher: TokenExpiredDispatcher
+) : Api {
 
     private inline fun <T> wrapErrorCall(block: () -> T): T {
         try {
@@ -30,7 +52,12 @@ class ApiIml(private val apiService: ApiService): Api {
         } catch (e: CancellationException) {
             throw e
         } catch (e: HttpException) {
-            throw parseHttpError(e)
+            val apiError = parseHttpError(e)
+            if (apiError.message == TOKEN_EXPIRED_MESSAGE) {
+                tokenExpiredDispatcher.dispatch()
+            }
+
+            throw e
         }
     }
 

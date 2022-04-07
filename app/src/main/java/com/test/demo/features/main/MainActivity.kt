@@ -3,17 +3,21 @@ package com.test.demo.features.main
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
+import androidx.lifecycle.lifecycleScope
 import com.test.demo.R
 import com.test.demo.databinding.ActivityMainBinding
+import com.test.demo.dispatcher.TokenExpiredDispatcher
 import com.test.demo.features.base.BaseActivity
-import com.test.demo.features.login.LoginFragment
+import com.test.demo.features.auth.LoginFragment
+import com.test.demo.utils.NavigationHelper
 import com.test.demo.utils.viewBinding
+import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override val binding by viewBinding { ActivityMainBinding.inflate(layoutInflater) }
+    val navigationHelper by lazy { NavigationHelper(supportFragmentManager, R.id.fragment_container) }
+    private val tokenExpiredDispatcher by inject<TokenExpiredDispatcher>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,8 +25,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setup() {
-        val fragment = supportFragmentManager.findFragmentById(R .id.fragment_container) ?: LoginFragment.newInstance()
-        changeFragment(fragment, false)
+        val fragment = navigationHelper.currentFragment ?: LoginFragment.newInstance()
+        navigationHelper.changeFragment(fragment, false)
+        handleTokenExpired()
+    }
+
+    private fun handleTokenExpired() {
+        lifecycleScope.launchWhenStarted {
+            tokenExpiredDispatcher.eventFlow().collect {
+                navigationHelper.openAsRoot(LoginFragment.newInstance())
+                showMessage(getString(R.string.token_expired_message))
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -43,13 +57,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     fun changeFragment(fragment: Fragment, addToBackStack: Boolean = true, name: String? = null) {
-        supportFragmentManager.commit {
-            setReorderingAllowed(true)
-            setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            if (addToBackStack) {
-                addToBackStack(name)
-            }
-            replace(R.id.fragment_container, fragment)
-        }
+        navigationHelper.changeFragment(fragment, addToBackStack, name)
     }
 }

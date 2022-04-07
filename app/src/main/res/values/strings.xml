@@ -17,4 +17,6 @@
     <string name="update_action">Update</string>
     <string name="update_product_success_greeting">Update product success!</string>
     <string name="action">Action</string>
+    <string name="register">Register</string>
+    <string name="token_expired_message">Your token has been expired, please login to continue</string>
 </resources>

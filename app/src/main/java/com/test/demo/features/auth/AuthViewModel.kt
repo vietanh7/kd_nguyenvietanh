@@ -1,14 +1,16 @@
-package com.test.demo.features.login
+package com.test.demo.features.auth
 
 import android.util.Patterns
 import androidx.lifecycle.asLiveData
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.data.remote.Api
+import com.test.demo.data.remote.ApiError
 import com.test.demo.features.base.BaseViewModel
+import com.test.demo.features.base.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 
-class LoginViewModel(
+class AuthViewModel(
     private val api: Api,
     private val prefsHelper: PrefsHelper
 ) : BaseViewModel() {
@@ -41,7 +43,18 @@ class LoginViewModel(
             }
 
             prefsHelper.saveToken(token.token)
-            event.postValue(LoginEvent.LoginSuccessEvent)
+            event.postValue(AuthEvent.LoginSuccessEvent)
+        }
+    }
+
+    fun register() {
+        launchLoading {
+            val user = api.register(email.value, password.value)
+            if (!user.success) {
+                throw ApiError("Failed to register", -1)
+            }
+
+            event.setValue(AuthEvent.RegisterSuccessEvent)
         }
     }
 }

@@ -4,7 +4,8 @@ import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.test.demo.data.dataModule
 import com.test.demo.data.remote.networkModule
-import com.test.demo.features.login.loginModule
+import com.test.demo.dispatcher.dispatcherModule
+import com.test.demo.features.auth.loginModule
 import com.test.demo.features.main.mainModule
 import com.test.demo.features.product.productModule
 import org.koin.android.ext.koin.androidContext
@@ -22,6 +23,7 @@ class DemoApp: Application() {
             modules(
                 networkModule,
                 dataModule,
+                dispatcherModule,
                 mainModule,
                 loginModule,
                 productModule
