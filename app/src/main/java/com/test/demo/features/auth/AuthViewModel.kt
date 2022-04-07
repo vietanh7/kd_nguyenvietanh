@@ -15,8 +15,8 @@ class AuthViewModel(
     private val prefsHelper: PrefsHelper
 ) : BaseViewModel() {
 
-    val email = MutableStateFlow("test.task@klikdokter.com")
-    val password = MutableStateFlow("T3stKl1kd0kt3r")
+    val email = MutableStateFlow("")
+    val password = MutableStateFlow("")
     val isOk = combine(email, password, this::canLogin).asLiveData()
 
     private fun canLogin(email: String, password: String): Boolean {

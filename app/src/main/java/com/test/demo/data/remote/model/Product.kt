@@ -26,5 +26,9 @@ data class Product(
     @SerializedName("unit")
     val unit: String,
     @SerializedName("updated_at")
-    val updatedAt: String
+    val updatedAt: String,
+    @SerializedName("success")
+    val success: Boolean?,
+    @SerializedName("message")
+    val message: String?
 ): Parcelable

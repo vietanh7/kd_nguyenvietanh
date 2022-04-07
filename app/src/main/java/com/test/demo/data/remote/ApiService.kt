@@ -49,4 +49,8 @@ interface ApiService {
         @Field("unit") unit: String,
         @Field("status") status: Int,
     ): Product
+
+    @FormUrlEncoded
+    @POST("api/item/search")
+    suspend fun searchProduct(@Field("sku") sku: String): Product
 }

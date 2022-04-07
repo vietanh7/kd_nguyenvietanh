@@ -34,6 +34,17 @@ class ProductViewModel(private val api: Api): BaseViewModel() {
         }
     }
 
+    fun searchBySku(sku: String?) {
+        if (sku.isNullOrEmpty()) {
+            return
+        }
+
+        launchLoading {
+            val product = api.searchProduct(sku)
+            listProduct.value = listOf(product)
+        }
+    }
+
 
     // ---Add, edit product
     fun addProduct() {

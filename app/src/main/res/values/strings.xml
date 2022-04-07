@@ -19,4 +19,6 @@
     <string name="action">Action</string>
     <string name="register">Register</string>
     <string name="token_expired_message">Your token has been expired, please login to continue</string>
+    <string name="search">Search</string>
+    <string name="product_list_title">Product list</string>
 </resources>

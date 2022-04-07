@@ -7,6 +7,7 @@ import com.test.demo.data.remote.model.Token
 import com.test.demo.dispatcher.TokenExpiredDispatcher
 import org.json.JSONObject
 import retrofit2.HttpException
+import retrofit2.http.Field
 import java.util.concurrent.CancellationException
 
 interface Api {
@@ -35,6 +36,8 @@ interface Api {
         unit: String,
         status: Int
     ): Product
+
+    suspend fun searchProduct(sku: String): Product
 
     companion object {
         const val TOKEN_EXPIRED_MESSAGE = "Provided token is expired."
@@ -121,5 +124,16 @@ class ApiIml(
         status: Int
     ): Product {
         return wrapErrorCall { apiService.updateProduct(sku, productName, quantity, price, unit, status) }
+    }
+
+    override suspend fun searchProduct(sku: String): Product {
+        return wrapErrorCall {
+            val product = apiService.searchProduct(sku)
+            if (product.success == false) {
+                throw ApiError(product.message.orEmpty(), -1)
+            }
+
+            product
+        }
     }
 }
