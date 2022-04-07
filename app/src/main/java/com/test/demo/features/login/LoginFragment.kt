@@ -26,13 +26,12 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, LoginViewModel>(R.layout
     }
 
     private fun observeVm() {
-        viewModel.loading.observe(::handleLoading)
         viewModel.email.asLiveData().observe { binding.emailEdt.setTextIfChanged(it)}
         viewModel.password.asLiveData().observe { binding.passwordEdt.setTextIfChanged(it) }
         viewModel.isOk.observe { binding.btnLogin.isEnabled = it }
     }
 
-    private fun handleLoading(isLoading: Boolean) {
+    override fun handleLoading(isLoading: Boolean) {
         binding.btnLogin.isEnabled = !isLoading
         binding.loadingIndicator.isVisible = isLoading
     }

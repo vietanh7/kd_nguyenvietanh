@@ -37,5 +37,16 @@ interface ApiService {
         @Field("price") price: Int,
         @Field("unit") unit: String,
         @Field("status") status: Int,
-    )
+    ): Product
+
+    @FormUrlEncoded
+    @POST("api/item/update")
+    suspend fun updateProduct(
+        @Field("sku") sku: String,
+        @Field("product_name") productName: String,
+        @Field("qty") quantity: Int,
+        @Field("price") price: Int,
+        @Field("unit") unit: String,
+        @Field("status") status: Int,
+    ): Product
 }

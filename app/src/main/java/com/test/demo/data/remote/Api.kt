@@ -5,7 +5,6 @@ import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
 import org.json.JSONObject
 import retrofit2.HttpException
-import retrofit2.http.Field
 import java.lang.Exception
 import java.util.concurrent.CancellationException
 
@@ -18,7 +17,9 @@ interface Api {
 
     suspend fun deleteProduct(sku: String): Product
 
-    suspend fun addProduct(sku: String, productName: String, quantity: Int, price: Int, unit: String, status: Int, )
+    suspend fun addProduct(sku: String, productName: String, quantity: Int, price: Int, unit: String, status: Int): Product
+
+    suspend fun updateProduct(sku: String, productName: String, quantity: Int, price: Int, unit: String, status: Int): Product
 }
 
 class ApiIml(private val apiService: ApiService): Api {
@@ -41,6 +42,10 @@ class ApiIml(private val apiService: ApiService): Api {
             val json = JSONObject(errorBody!!)
             if (json.has("error")) {
                 message = json.getString("error")
+            }
+
+            if (json.has("message")) {
+                message = json.getString("message")
             }
 
             if (json.has("code")) {
@@ -76,7 +81,18 @@ class ApiIml(private val apiService: ApiService): Api {
         price: Int,
         unit: String,
         status: Int
-    ) {
+    ): Product {
         return wrapErrorCall { apiService.addProduct(sku, productName, quantity, price, unit, status) }
+    }
+
+    override suspend fun updateProduct(
+        sku: String,
+        productName: String,
+        quantity: Int,
+        price: Int,
+        unit: String,
+        status: Int
+    ): Product {
+        return wrapErrorCall { apiService.updateProduct(sku, productName, quantity, price, unit, status) }
     }
 }

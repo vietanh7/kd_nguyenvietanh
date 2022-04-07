@@ -6,7 +6,7 @@ import com.test.demo.data.dataModule
 import com.test.demo.data.remote.networkModule
 import com.test.demo.features.login.loginModule
 import com.test.demo.features.main.mainModule
-import com.test.demo.features.product.productListModule
+import com.test.demo.features.product.productModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -24,7 +24,7 @@ class DemoApp: Application() {
                 dataModule,
                 mainModule,
                 loginModule,
-                productListModule
+                productModule
             )
         }
     }

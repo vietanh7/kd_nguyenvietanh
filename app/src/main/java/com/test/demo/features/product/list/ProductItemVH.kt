@@ -1,5 +1,6 @@
 package com.test.demo.features.product.list
 
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.ProductItemBinding
@@ -10,6 +11,10 @@ class ProductItemVH(val binding: ProductItemBinding, val callback: ProductAdapte
     var boundItem: Product? = null
 
     init {
+        itemView.setOnClickListener {
+            callback.onItemClick(boundItem ?: return@setOnClickListener)
+        }
+
         binding.btnDelete.setOnClickListener {
             callback.deleteProductClick(boundItem ?: return@setOnClickListener)
         }
@@ -24,6 +29,7 @@ class ProductItemVH(val binding: ProductItemBinding, val callback: ProductAdapte
         with(binding) {
             productName.text = product.productName
             sku.text = product.sku
+            headerGroup.isGone = adapterPosition != 0
         }
     }
 }

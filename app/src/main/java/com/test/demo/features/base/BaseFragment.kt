@@ -2,6 +2,7 @@ package com.test.demo.features.base
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -24,17 +25,22 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
         }
 
         viewModel.error().observe { showMessage(it.message.orEmpty()) }
+        viewModel.loading.observe(viewLifecycleOwner, this::handleLoading)
     }
 
-    open fun onNewEvent(event: Event) {
+    open fun onNewEvent(event: Event) = Unit
 
-    }
+    open fun handleLoading(isLoading: Boolean) = Unit
 
-    fun setupToolbar(toolbar: Toolbar) {
+    fun setupToolbar(toolbar: Toolbar, title: String? = null) {
         val activity = activity as? BaseActivity<*> ?: return
-        val displayBack = activity.supportFragmentManager.backStackEntryCount > 1
+        val displayBack = activity.supportFragmentManager.backStackEntryCount > 0
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.apply {
+            if (title != null) {
+                setTitle(title)
+            }
+
             setDisplayShowHomeEnabled(displayBack)
             setDisplayHomeAsUpEnabled(displayBack)
         }
@@ -46,6 +52,10 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
             .setMessage(message)
             .setNeutralButton("Ok") { _, _ -> }
             .show()
+    }
+
+    fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     fun <T> LiveData<T>.observe(observer: Observer<T>) {

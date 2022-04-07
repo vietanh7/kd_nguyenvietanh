@@ -12,4 +12,9 @@
     <string name="price">Price</string>
     <string name="unit">Unit</string>
     <string name="status">Status</string>
+    <string name="edit_product_title">Edit product</string>
+    <string name="add_product_success_greeting">Add new product success!</string>
+    <string name="update_action">Update</string>
+    <string name="update_product_success_greeting">Update product success!</string>
+    <string name="action">Action</string>
 </resources>

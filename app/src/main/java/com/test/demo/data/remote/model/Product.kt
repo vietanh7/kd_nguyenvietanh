@@ -1,15 +1,18 @@
 package com.test.demo.data.remote.model
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Product(
     @SerializedName("created_at")
     val createdAt: String,
     @SerializedName("id")
     val id: Int,
     @SerializedName("image")
-    val image: Any,
+    val image: String?,
     @SerializedName("price")
     val price: Int,
     @SerializedName("product_name")
@@ -24,4 +27,4 @@ data class Product(
     val unit: String,
     @SerializedName("updated_at")
     val updatedAt: String
-)
+): Parcelable
