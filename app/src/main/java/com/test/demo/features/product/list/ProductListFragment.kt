@@ -74,6 +74,7 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
     }
 
     private fun toEditProduct(product: Product) {
+        viewModel.clearEditData()
         val mainActivity = activity as? MainActivity ?: return
         mainActivity.changeFragment(EditProductFragment.newInstance(product), true)
     }

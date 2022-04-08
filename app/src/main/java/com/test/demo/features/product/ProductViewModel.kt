@@ -82,6 +82,7 @@ class ProductViewModel(private val api: Api): BaseViewModel() {
     }
 
     fun clearEditData() {
+        initialized = false
         sku.value = ""
         productName.value = ""
         quantity.value = 0
@@ -96,12 +97,16 @@ class ProductViewModel(private val api: Api): BaseViewModel() {
         }
     }
 
+    private var initialized = false
     fun init(product: Product) {
-        sku.value = product.sku
-        productName.value = product.productName
-        quantity.value = product.qty
-        price.value = product.price
-        unit.value = product.unit
-        status.value = product.status
+        if (!initialized) {
+            initialized = true
+            sku.value = product.sku
+            productName.value = product.productName
+            quantity.value = product.qty
+            price.value = product.price
+            unit.value = product.unit
+            status.value = product.status
+        }
     }
 }

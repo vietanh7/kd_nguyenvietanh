@@ -44,7 +44,7 @@ class RegisterFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layo
 
     private fun toLogin() {
         val activity = activity as? MainActivity ?: return
-        activity.changeFragment(LoginFragment.newInstance())
+        activity.changeFragment(LoginFragment.newInstance(), false)
     }
 
     override fun onNewEvent(event: Event) {
