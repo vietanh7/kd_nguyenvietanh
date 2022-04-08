@@ -35,9 +35,13 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
 
     fun setupToolbar(toolbar: Toolbar, title: String? = null) {
         val activity = activity as? BaseActivity<*> ?: return
-        val entryCount = activity.supportFragmentManager
-            .findFragmentById(R.id.fragment_container)
-            ?.childFragmentManager?.backStackEntryCount ?: 0
+        val entryCount = if (activity.navHostId == null) {
+            activity.supportFragmentManager.backStackEntryCount
+        } else {
+            activity.supportFragmentManager.findFragmentById(R.id.fragment_container)
+                ?.childFragmentManager?.backStackEntryCount ?: 0
+        }
+
         val displayBack = entryCount > 0
 
         activity.setSupportActionBar(toolbar)

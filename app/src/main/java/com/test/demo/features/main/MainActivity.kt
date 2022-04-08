@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.databinding.ActivityMainBinding
+import com.test.demo.dispatcher.NavigationDispatcher
 import com.test.demo.dispatcher.TokenExpiredDispatcher
 import com.test.demo.features.base.BaseActivity
 import com.test.demo.utils.viewBinding
@@ -19,9 +20,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestin
 
     override val binding by viewBinding { ActivityMainBinding.inflate(layoutInflater) }
     private val tokenExpiredDispatcher by inject<TokenExpiredDispatcher>()
+    private val navigationDispatcher by inject<NavigationDispatcher>()
     private val prefsHelper: PrefsHelper by inject()
     private val navController
         get() = findNavController(R.id.fragment_container)
+
+    override val navHostId: Int
+        get() = R.id.fragment_container
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +48,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestin
             navController.graph = navGraph
             navController.addOnDestinationChangedListener(this@MainActivity)
         }
+
+        lifecycleScope.launchWhenResumed {
+            navigationDispatcher.eventFlow.collect {
+                it.invoke(navController)
+            }
+        }
     }
 
     private fun handleTokenExpired() {
         lifecycleScope.launchWhenStarted {
-            tokenExpiredDispatcher.eventFlow().collect {
+            tokenExpiredDispatcher.eventFlow.collect {
                 initNavigation(R.id.loginFragment)
                 navController.clearBackStack(R.id.loginFragment)
                 showMessage(getString(R.string.token_expired_message))

@@ -2,15 +2,17 @@ package com.test.demo.features.auth
 
 import android.util.Patterns
 import androidx.lifecycle.asLiveData
+import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.ApiError
+import com.test.demo.dispatcher.NavigationDispatcher
 import com.test.demo.features.base.BaseViewModel
-import com.test.demo.features.base.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 
 class AuthViewModel(
+    private val navigationDispatcher: NavigationDispatcher,
     private val api: Api,
     private val prefsHelper: PrefsHelper
 ) : BaseViewModel() {
@@ -43,7 +45,7 @@ class AuthViewModel(
             }
 
             prefsHelper.saveToken(token.token)
-            event.postValue(AuthEvent.LoginSuccessEvent)
+            navigationDispatcher.dispatch { it.navigate(R.id.action_loginFragment_to_productListFragment) }
         }
     }
 

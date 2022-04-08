@@ -37,16 +37,6 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.
         binding.loadingIndicator.isVisible = isLoading
     }
 
-    override fun onNewEvent(event: Event) {
-        when(event) {
-            is AuthEvent.LoginSuccessEvent -> {
-                findNavController().navigate(R.id.action_loginFragment_to_productListFragment)
-            }
-        }
-
-        super.onNewEvent(event)
-    }
-
     private fun setup() {
         with(binding) {
             title.setText(R.string.login)
