@@ -26,7 +26,7 @@ class EditProductFragment: AddProductFragment() {
     }
 
     private fun initData() {
-        val product = arguments?.getParcelable<Product>(PRODUCT_KEY) ?: return
+        val product = arguments?.getParcelable<Product>(PRODUCT_ARGS_KEY) ?: return
         viewModel.init(product)
     }
 
@@ -41,11 +41,11 @@ class EditProductFragment: AddProductFragment() {
     }
 
     companion object {
-        private const val PRODUCT_KEY = "PRODUCT"
+        const val PRODUCT_ARGS_KEY = "PRODUCT"
 
         fun newInstance(product: Product): EditProductFragment {
             val args = Bundle(1).apply {
-                putParcelable(PRODUCT_KEY, product)
+                putParcelable(PRODUCT_ARGS_KEY, product)
             }
             val fragment = EditProductFragment()
             fragment.arguments = args

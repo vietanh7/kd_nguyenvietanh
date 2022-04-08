@@ -2,25 +2,26 @@ package com.test.demo.features.main
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.databinding.ActivityMainBinding
 import com.test.demo.dispatcher.TokenExpiredDispatcher
 import com.test.demo.features.base.BaseActivity
-import com.test.demo.features.auth.LoginFragment
-import com.test.demo.features.auth.RegisterFragment
-import com.test.demo.utils.NavigationHelper
 import com.test.demo.utils.viewBinding
 import org.koin.android.ext.android.inject
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestinationChangedListener {
 
     override val binding by viewBinding { ActivityMainBinding.inflate(layoutInflater) }
-    val navigationHelper by lazy { NavigationHelper(supportFragmentManager, R.id.fragment_container) }
     private val tokenExpiredDispatcher by inject<TokenExpiredDispatcher>()
     private val prefsHelper: PrefsHelper by inject()
+    private val navController
+        get() = findNavController(R.id.fragment_container)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,23 +29,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setup() {
-        val fragment = navigationHelper.currentFragment ?: getStartDestination()
-        navigationHelper.changeFragment(fragment, false)
+        val startDestination = if (prefsHelper.getToken().isNullOrEmpty()) R.id.registerFragment else R.id.loginFragment
+        initNavigation(startDestination)
         handleTokenExpired()
     }
 
-    private fun getStartDestination(): Fragment {
-        return if (prefsHelper.getToken().isNullOrEmpty()) {
-            RegisterFragment.newInstance()
-        } else {
-            LoginFragment.newInstance()
+    private fun initNavigation(start: Int) {
+        // https://issuetracker.google.com/issues/142847973?pli=1
+        (supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment).apply {
+            val navInflater = navController.navInflater
+            val navGraph = navInflater.inflate(R.navigation.nav_graph)
+            navGraph.setStartDestination(start)
+            navController.graph = navGraph
+            navController.addOnDestinationChangedListener(this@MainActivity)
         }
     }
 
     private fun handleTokenExpired() {
         lifecycleScope.launchWhenStarted {
             tokenExpiredDispatcher.eventFlow().collect {
-                navigationHelper.openAsRoot(LoginFragment.newInstance())
+                initNavigation(R.id.loginFragment)
+                navController.clearBackStack(R.id.loginFragment)
                 showMessage(getString(R.string.token_expired_message))
             }
         }
@@ -59,15 +64,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 1) {
-            supportFragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
-        }
-    }
+    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
 
-    fun changeFragment(fragment: Fragment, addToBackStack: Boolean = true, name: String? = null) {
-        navigationHelper.changeFragment(fragment, addToBackStack, name)
     }
 }

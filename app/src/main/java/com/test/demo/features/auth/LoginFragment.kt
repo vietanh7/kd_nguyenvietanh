@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import com.test.demo.R
 import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
@@ -39,8 +40,7 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.
     override fun onNewEvent(event: Event) {
         when(event) {
             is AuthEvent.LoginSuccessEvent -> {
-                val host = hostActivity<MainActivity>() ?: return
-                host.changeFragment(ProductListFragment.newInstance(), false)
+                findNavController().navigate(R.id.action_loginFragment_to_productListFragment)
             }
         }
 
@@ -56,8 +56,7 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.
             emailEdt.doAfterTextChanged { viewModel.email.value = it?.toString().orEmpty() }
             passwordEdt.doAfterTextChanged { viewModel.password.value = it?.toString().orEmpty() }
             navigationText.setOnClickListener {
-                val activity = hostActivity<MainActivity>() ?: return@setOnClickListener
-                activity.changeFragment(RegisterFragment.newInstance(), false)
+                findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
         }
     }

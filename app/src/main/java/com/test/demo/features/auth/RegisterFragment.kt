@@ -5,11 +5,11 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import com.test.demo.R
 import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.base.Event
-import com.test.demo.features.main.MainActivity
 import com.test.demo.utils.setTextIfChanged
 import com.test.demo.utils.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,7 +32,7 @@ class RegisterFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layo
             emailEdt.doAfterTextChanged { viewModel.email.value = it?.toString().orEmpty() }
             passwordEdt.doAfterTextChanged { viewModel.password.value = it?.toString().orEmpty() }
             navigationText.setText(R.string.login)
-            navigationText.setOnClickListener { toLogin() }
+            navigationText.setOnClickListener { findNavController().navigate(R.id.action_registerFragment_to_loginFragment) }
         }
     }
 
@@ -42,16 +42,11 @@ class RegisterFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layo
         viewModel.isOk.observe { binding.actionBtn.isEnabled = it }
     }
 
-    private fun toLogin() {
-        val activity = activity as? MainActivity ?: return
-        activity.changeFragment(LoginFragment.newInstance(), false)
-    }
-
     override fun onNewEvent(event: Event) {
         when(event) {
             is AuthEvent.RegisterSuccessEvent -> {
                 showMessageAndDo("Register success, you can now login") {
-                    toLogin()
+                    findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                 }
             }
 

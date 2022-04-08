@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/registerFragment">
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.test.demo.features.auth.RegisterFragment"
+        tools:layout="@layout/login_fragment"
+        android:label="RegisterFragment" >
+        <action
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/registerFragment"
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_registerFragment_to_productListFragment"
+            app:destination="@id/productListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.test.demo.features.auth.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"
+            android:id="@+id/action_loginFragment_to_productListFragment"
+            app:destination="@id/productListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.test.demo.features.product.list.ProductListFragment"
+        android:label="ProductListFragment" >
+        <action
+            android:id="@+id/action_productList_to_add"
+            app:destination="@id/addProductFragment" />
+        <action
+            android:id="@+id/action_productList_to_edit"
+            app:destination="@id/editProductFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="com.test.demo.features.product.edit.EditProductFragment"
+        android:label="EditProductFragment" >
+    </fragment>
+
+    <fragment
+        android:id="@+id/addProductFragment"
+        android:name="com.test.demo.features.product.add.AddProductFragment"
+        android:label="AddProductFragment" >
+    </fragment>
+
+</navigation>

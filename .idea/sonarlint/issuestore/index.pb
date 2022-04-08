@@ -1,12 +1,6 @@
 
-?
-settings.gradle,0/5/05efc8b1657769a27696d478ded1e95f38737233
-A
-gradle.properties,2/a/2afbb999f001938c88fa43fc2ef52abf0f8213e4
 j
 :app/src/main/java/com/test/demo/data/remote/model/Token.kt,a/6/a63bc8fd1fc7f113430bbb85d0c8a9111289ef9b
-k
-;app/src/main/java/com/test/demo/features/main/MainModule.kt,a/c/ac488fdc22039581aaca4a0eecdd227b596ce5bc
 f
 6app/src/main/java/com/test/demo/features/base/Event.kt,d/e/de22dd40c4d287c256e88bc3a121271628825d10
 l

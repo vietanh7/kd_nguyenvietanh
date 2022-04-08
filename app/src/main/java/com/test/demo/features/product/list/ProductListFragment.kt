@@ -1,29 +1,20 @@
 package com.test.demo.features.product.list
 
-import android.graphics.Color
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.children
-import androidx.core.view.forEach
+import androidx.core.os.bundleOf
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.ProductListFragmentBinding
 import com.test.demo.features.base.BaseFragment
-import com.test.demo.features.main.MainActivity
 import com.test.demo.features.product.ProductViewModel
-import com.test.demo.features.product.add.AddProductFragment
 import com.test.demo.features.product.edit.EditProductFragment
-import com.test.demo.utils.getColorFromAttr
 import com.test.demo.utils.hideKeyboard
 import com.test.demo.utils.viewBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -69,14 +60,12 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
 
     private fun toAddProduct() {
         viewModel.clearEditData()
-        val mainActivity = activity as? MainActivity ?: return
-        mainActivity.changeFragment(AddProductFragment.newInstance(), true)
+        findNavController().navigate(R.id.action_productList_to_add)
     }
 
     private fun toEditProduct(product: Product) {
         viewModel.clearEditData()
-        val mainActivity = activity as? MainActivity ?: return
-        mainActivity.changeFragment(EditProductFragment.newInstance(product), true)
+        findNavController().navigate(R.id.action_productList_to_edit, bundleOf(EditProductFragment.PRODUCT_ARGS_KEY to product))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -116,11 +105,5 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
 
     override fun onItemClick(product: Product) {
         toEditProduct(product)
-    }
-
-    companion object {
-        fun newInstance(): ProductListFragment {
-            return ProductListFragment()
-        }
     }
 }
