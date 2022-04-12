@@ -58,10 +58,4 @@ class RegisterFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layo
         binding.actionBtn.isEnabled = !isLoading
         binding.loadingIndicator.isVisible = isLoading
     }
-
-    companion object {
-        fun newInstance(): RegisterFragment {
-            return RegisterFragment()
-        }
-    }
 }

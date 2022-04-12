@@ -9,9 +9,6 @@ import androidx.navigation.fragment.findNavController
 import com.test.demo.R
 import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
-import com.test.demo.features.base.Event
-import com.test.demo.features.main.MainActivity
-import com.test.demo.features.product.list.ProductListFragment
 import com.test.demo.utils.setTextIfChanged
 import com.test.demo.utils.viewBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,12 +45,6 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.
             navigationText.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
-        }
-    }
-
-    companion object {
-        fun newInstance(): LoginFragment {
-            return LoginFragment()
         }
     }
 }

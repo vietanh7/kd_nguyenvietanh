@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3645833333333333" />
+        <entry key="../../.gradle/caches/transforms-3/93e1856551d2ec97497f45549ad44355/transformed/appcompat-1.4.1/res/drawable/abc_ic_go_search_api_material.xml" value="0.288" />
+        <entry key="../../.gradle/caches/transforms-3/93e1856551d2ec97497f45549ad44355/transformed/appcompat-1.4.1/res/drawable/abc_ic_search_api_material.xml" value="0.288" />
         <entry key="app/src/main/res/drawable/ic_add_24.xml" value="0.199" />
         <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.199" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />

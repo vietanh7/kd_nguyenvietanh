@@ -17,6 +17,8 @@ class ProductViewModel(private val api: Api): BaseViewModel() {
     val unit = MutableStateFlow("")
     val status = MutableStateFlow(0)
 
+    val searchQuery = MutableStateFlow("")
+
     fun getProductList() {
         launchLoading {
             listProduct.value = api.getListProduct()

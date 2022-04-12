@@ -4,10 +4,9 @@ import com.test.demo.data.remote.Api.Companion.TOKEN_EXPIRED_MESSAGE
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
-import com.test.demo.dispatcher.TokenExpiredDispatcher
+import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
 import org.json.JSONObject
 import retrofit2.HttpException
-import retrofit2.http.Field
 import java.util.concurrent.CancellationException
 
 interface Api {

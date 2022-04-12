@@ -5,7 +5,7 @@ import com.test.demo.data.local.PrefsHelper
 import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.ApiIml
 import com.test.demo.data.remote.ApiService
-import com.test.demo.dispatcher.TokenExpiredDispatcher
+import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
 import org.koin.dsl.bind
 import org.koin.dsl.module
 

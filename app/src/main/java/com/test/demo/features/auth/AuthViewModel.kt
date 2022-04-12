@@ -6,7 +6,7 @@ import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.ApiError
-import com.test.demo.dispatcher.NavigationDispatcher
+import com.test.demo.utils.dispatcher.NavigationDispatcher
 import com.test.demo.features.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine

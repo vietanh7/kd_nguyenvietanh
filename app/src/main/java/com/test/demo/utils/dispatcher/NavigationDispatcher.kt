@@ -1,4 +1,4 @@
-package com.test.demo.dispatcher
+package com.test.demo.utils.dispatcher
 
 import androidx.navigation.NavController
 import kotlinx.coroutines.channels.Channel

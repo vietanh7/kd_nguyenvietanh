@@ -11,15 +11,19 @@
         tools:layout="@layout/login_fragment"
         android:label="RegisterFragment" >
         <action
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/registerFragment"
             android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
             app:popUpTo="@id/registerFragment"
-            app:popUpToInclusive="true"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_registerFragment_to_productListFragment"
-            app:destination="@id/productListFragment" />
+            app:destination="@id/productListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -27,15 +31,19 @@
         android:name="com.test.demo.features.auth.LoginFragment"
         android:label="LoginFragment" >
         <action
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
-        <action
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"
+            app:popUpToInclusive="true" />
+        <action
             android:id="@+id/action_loginFragment_to_productListFragment"
-            app:destination="@id/productListFragment" />
+            app:destination="@id/productListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -44,10 +52,18 @@
         android:label="ProductListFragment" >
         <action
             android:id="@+id/action_productList_to_add"
-            app:destination="@id/addProductFragment" />
+            app:destination="@id/addProductFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_productList_to_edit"
-            app:destination="@id/editProductFragment" />
+            app:destination="@id/editProductFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment

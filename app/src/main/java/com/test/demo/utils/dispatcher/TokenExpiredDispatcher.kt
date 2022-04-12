@@ -1,4 +1,4 @@
-package com.test.demo.dispatcher
+package com.test.demo.utils.dispatcher
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
