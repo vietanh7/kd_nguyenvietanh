@@ -4,57 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/selectableItemBackground"
-    android:paddingStart="4dp"
-    android:paddingEnd="4dp"
+    android:paddingHorizontal="4dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/label1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textStyle="bold"
-        android:text="@string/sku"
-        app:layout_constraintEnd_toStartOf="@+id/guideline5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/label2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="@string/product_name"
-        app:layout_constraintBaseline_toBaselineOf="@+id/label1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintStart_toStartOf="@+id/guideline5" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/header_group"
-        app:constraint_referenced_ids="label1, label2, label3, divider"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/label3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action"
-        android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/label1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline4" />
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/label2"
-        android:layout_height="1dp"
-        android:background="@android:color/black"/>
 
     <TextView
         android:id="@+id/sku"
@@ -121,7 +73,7 @@
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toStartOf="@+id/btn_delete"
         app:layout_constraintStart_toEndOf="@+id/product_name"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_delete"

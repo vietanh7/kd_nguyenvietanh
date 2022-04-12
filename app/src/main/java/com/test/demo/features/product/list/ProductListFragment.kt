@@ -8,6 +8,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.test.demo.R
 import com.test.demo.data.remote.model.Product
@@ -39,7 +40,7 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
             refreshLayout.setOnRefreshListener(this@ProductListFragment)
 
             productAdapter = ProductAdapter(this@ProductListFragment)
-            productRc.adapter = productAdapter
+            productRc.adapter = ConcatAdapter(ProductHeaderAdapter(), productAdapter)
             productRc.setHasFixedSize(true)
 
             btnAdd.setOnClickListener { toAddProduct() }
@@ -89,11 +90,13 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         hideKeyboard()
-        viewModel.searchBySku(query)
         return true
     }
 
-    override fun onQueryTextChange(newText: String?): Boolean = false
+    override fun onQueryTextChange(newText: String?): Boolean {
+        viewModel.searchQuery.value = newText.orEmpty()
+        return true
+    }
 
     override fun deleteProductClick(product: Product) {
         viewModel.deleteProduct(product.sku)

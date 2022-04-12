@@ -1,10 +1,14 @@
 package com.test.demo.features.product
 
+import androidx.lifecycle.viewModelScope
 import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.model.Product
 import com.test.demo.features.base.BaseViewModel
 import com.test.demo.utils.SingleLiveEvent
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ProductViewModel(private val api: Api): BaseViewModel() {
     val listProduct = MutableStateFlow(emptyList<Product>())
@@ -18,6 +22,13 @@ class ProductViewModel(private val api: Api): BaseViewModel() {
     val status = MutableStateFlow(0)
 
     val searchQuery = MutableStateFlow("")
+
+    init {
+        searchQuery.debounce(300)
+            .onEach { searchBySku(it) }
+            .launchIn(viewModelScope)
+    }
+
 
     fun getProductList() {
         launchLoading {
@@ -38,12 +49,17 @@ class ProductViewModel(private val api: Api): BaseViewModel() {
 
     fun searchBySku(sku: String?) {
         if (sku.isNullOrEmpty()) {
+            getProductList()
             return
         }
 
         launchLoading {
-            val product = api.searchProduct(sku)
-            listProduct.value = listOf(product)
+            try {
+                val product = api.searchProduct(sku)
+                listProduct.value = listOf(product)
+            } catch (e: Exception) {
+                listProduct.value = emptyList()
+            }
         }
     }
 

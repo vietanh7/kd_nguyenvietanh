@@ -4,8 +4,6 @@ j
 f
 6app/src/main/java/com/test/demo/features/base/Event.kt,d/e/de22dd40c4d287c256e88bc3a121271628825d10
 i
-9app/src/main/java/com/test/demo/data/local/PrefsHelper.kt,0/5/05e91629675f16abb010fcd4ce646dcf630d0237
-i
 9app/src/main/java/com/test/demo/features/base/ListItem.kt,7/6/763ffd94e41ced5b4a72306599459171a477cae2
 i
 9app/src/main/java/com/test/demo/utils/ViewBindingUtils.kt,3/8/38f0106e8598d7570c3ecaa020cd77460a2118a6
@@ -13,8 +11,6 @@ l
 <app/src/main/java/com/test/demo/data/remote/NetworkModule.kt,0/c/0c3e300396ab804b355ede9c27b62a327615a416
 w
 Gapp/src/main/java/com/test/demo/data/remote/AuthorizationInterceptor.kt,b/a/ba581e62a3d3bd7b5c95045b9df412a4ef14d5e0
-w
-Gapp/src/main/java/com/test/demo/features/product/list/ProductAdapter.kt,e/d/ed1855413746b0f1a2eea528040a34aca49588fe
 k
 ;app/src/main/java/com/test/demo/features/main/MainModule.kt,a/c/ac488fdc22039581aaca4a0eecdd227b596ce5bc
 n
@@ -45,13 +41,9 @@ j
 :app/src/main/java/com/test/demo/features/auth/AuthEvent.kt,3/2/32661266d6b014f81c2bb61f1a0cbea5a7ee430b
 q
 Aapp/src/main/java/com/test/demo/features/auth/RegisterFragment.kt,d/d/ddf62241d8451e50e66016d04607cb0d39310ddf
-p
-@app/src/main/java/com/test/demo/features/product/ProductEvent.kt,d/5/d5a433018c2e4399300302d29eecfe47cace7e5e
 m
 =app/src/main/java/com/test/demo/features/base/BaseActivity.kt,e/c/ec9848199dcb7a12f02c6e031f383bd88bfc159c
 Z
 *app/src/main/java/com/test/demo/DemoApp.kt,8/7/87c83117ad9c651e989e2f08d969ddea515d3ad0
-m
-=app/src/main/java/com/test/demo/features/main/MainActivity.kt,c/0/c0ddd1f47ddd02b53c6895f628ad66c3712adeae
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
