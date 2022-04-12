@@ -8,26 +8,28 @@ import com.test.demo.utils.dispatcher.dispatcherModule
 import com.test.demo.features.auth.loginModule
 import com.test.demo.features.main.mainModule
 import com.test.demo.features.product.productModule
+import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
+@HiltAndroidApp
 class DemoApp: Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         AndroidThreeTen.init(this)
 
-        startKoin {
-            androidContext(this@DemoApp)
-            modules(
-                networkModule,
-                dataModule,
-                dispatcherModule,
-                mainModule,
-                loginModule,
-                productModule
-            )
-        }
+//        startKoin {
+//            androidContext(this@DemoApp)
+//            modules(
+//                networkModule,
+//                dataModule,
+//                dispatcherModule,
+//                mainModule,
+//                loginModule,
+//                productModule
+//            )
+//        }
     }
 }

@@ -14,8 +14,10 @@ import com.test.demo.utils.dispatcher.NavigationDispatcher
 import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
 import com.test.demo.features.base.BaseActivity
 import com.test.demo.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import org.koin.android.ext.android.inject
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestinationChangedListener {
 
     override val binding by viewBinding { ActivityMainBinding.inflate(layoutInflater) }

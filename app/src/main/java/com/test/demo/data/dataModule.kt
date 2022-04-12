@@ -10,9 +10,9 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 
 val dataModule
- get() = module {
-     single { providePrefsHelper(get()) }
-     single { provideApi(get(), get()) } bind Api::class
+    get() = module {
+        single { providePrefsHelper(get()) }
+        single { provideApi(get(), get()) } bind Api::class
     }
 
 private fun providePrefsHelper(context: Context): PrefsHelper {

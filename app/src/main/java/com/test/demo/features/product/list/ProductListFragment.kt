@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
@@ -18,12 +19,13 @@ import com.test.demo.features.product.ProductViewModel
 import com.test.demo.features.product.edit.EditProductFragment
 import com.test.demo.utils.hideKeyboard
 import com.test.demo.utils.viewBinding
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewModel>(R.layout.product_list_fragment),
     SwipeRefreshLayout.OnRefreshListener, ProductAdapter.Callback, SearchView.OnQueryTextListener {
     override val binding: ProductListFragmentBinding by viewBinding { ProductListFragmentBinding.bind(it) }
-    override val viewModel: ProductViewModel by sharedViewModel()
+    override val viewModel: ProductViewModel by activityViewModels()
 
     var productAdapter: ProductAdapter? = null
 

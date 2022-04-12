@@ -5,12 +5,15 @@ import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.model.Product
 import com.test.demo.features.base.BaseViewModel
 import com.test.demo.utils.SingleLiveEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import javax.inject.Inject
 
-class ProductViewModel(private val api: Api): BaseViewModel() {
+@HiltViewModel
+class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel() {
     val listProduct = MutableStateFlow(emptyList<Product>())
     val needReload = SingleLiveEvent(true)
 

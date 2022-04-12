@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isInvisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.activityViewModels
 import com.test.demo.R
 import com.test.demo.databinding.AddProductFragmentBinding
 import com.test.demo.features.base.BaseFragment
@@ -13,11 +14,13 @@ import com.test.demo.features.product.ProductViewModel
 import com.test.demo.utils.observeAsLiveData
 import com.test.demo.utils.setTextIfChanged
 import com.test.demo.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+@AndroidEntryPoint
 open class AddProductFragment: BaseFragment<AddProductFragmentBinding, ProductViewModel>(R.layout.add_product_fragment) {
     override val binding: AddProductFragmentBinding by viewBinding { AddProductFragmentBinding.bind(it) }
-    override val viewModel: ProductViewModel by sharedViewModel()
+    override val viewModel: ProductViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

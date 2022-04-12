@@ -7,7 +7,9 @@ import com.test.demo.data.remote.model.Product
 import com.test.demo.features.base.Event
 import com.test.demo.features.product.ProductEvent
 import com.test.demo.features.product.add.AddProductFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class EditProductFragment: AddProductFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

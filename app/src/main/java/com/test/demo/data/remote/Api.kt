@@ -8,6 +8,7 @@ import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.util.concurrent.CancellationException
+import javax.inject.Inject
 
 interface Api {
     suspend fun login(email: String, password: String): Token
@@ -43,7 +44,7 @@ interface Api {
     }
 }
 
-class ApiIml(
+class ApiIml @Inject constructor(
     private val apiService: ApiService,
     private val tokenExpiredDispatcher: TokenExpiredDispatcher
 ) : Api {
