@@ -1,9 +1,9 @@
-package com.test.demo.data.remote
+package com.test.demo.data.remote.network
 
 import com.google.gson.Gson
 import com.test.demo.BuildConfig
 import com.test.demo.data.local.PrefsHelper
-import dagger.Binds
+import com.test.demo.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,14 +17,9 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class NetworkModuleDagger {
+object NetworkModuleDagger {
 
-    companion object {
-        private const val NETWORK_TIMEOUT = 20L
-    }
-
-    @Binds
-    abstract fun bindApiImpl(apiImpl: ApiIml): Api
+    private const val NETWORK_TIMEOUT = 20L
 
     @Singleton
     @Provides

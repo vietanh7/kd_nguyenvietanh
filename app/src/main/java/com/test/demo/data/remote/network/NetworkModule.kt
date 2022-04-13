@@ -3,6 +3,7 @@ package com.test.demo.data.remote
 import com.google.gson.Gson
 import com.test.demo.BuildConfig
 import com.test.demo.data.local.PrefsHelper
+import com.test.demo.data.remote.network.AuthorizationInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module

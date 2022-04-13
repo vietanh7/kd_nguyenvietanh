@@ -6,6 +6,7 @@ import com.test.demo.data.remote.model.Product
 import com.test.demo.features.base.BaseViewModel
 import com.test.demo.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -27,7 +28,7 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
     val searchQuery = MutableStateFlow("")
 
     init {
-        searchQuery.debounce(300)
+        searchQuery.debounce(500)
             .onEach { searchBySku(it) }
             .launchIn(viewModelScope)
     }
@@ -50,13 +51,15 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
         }
     }
 
+    private var searchJob: Job? = null
     fun searchBySku(sku: String?) {
         if (sku.isNullOrEmpty()) {
             getProductList()
             return
         }
 
-        launchLoading {
+        searchJob?.cancel()
+        searchJob = launchLoading {
             try {
                 val product = api.searchProduct(sku)
                 listProduct.value = listOf(product)

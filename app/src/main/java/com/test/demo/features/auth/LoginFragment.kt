@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.test.demo.R
@@ -11,11 +12,12 @@ import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.utils.setTextIfChanged
 import com.test.demo.utils.viewBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.login_fragment) {
     override val binding by viewBinding { LoginFragmentBinding.bind(it) }
-    override val viewModel: AuthViewModel by viewModel()
+    override val viewModel: AuthViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

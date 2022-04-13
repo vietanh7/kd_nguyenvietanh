@@ -1,8 +1,6 @@
 
 j
 :app/src/main/java/com/test/demo/data/remote/model/Token.kt,a/6/a63bc8fd1fc7f113430bbb85d0c8a9111289ef9b
-f
-6app/src/main/java/com/test/demo/features/base/Event.kt,d/e/de22dd40c4d287c256e88bc3a121271628825d10
 i
 9app/src/main/java/com/test/demo/features/base/ListItem.kt,7/6/763ffd94e41ced5b4a72306599459171a477cae2
 i
@@ -15,11 +13,23 @@ X
 (gradle/wrapper/gradle-wrapper.properties,f/b/fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
 ?
 settings.gradle,0/5/05efc8b1657769a27696d478ded1e95f38737233
-n
->app/src/main/java/com/test/demo/features/auth/LoginFragment.kt,0/8/08a419c108d6c9f59871f98beaa5f8878eeb4eb9
-j
-:app/src/main/java/com/test/demo/features/auth/AuthEvent.kt,3/2/32661266d6b014f81c2bb61f1a0cbea5a7ee430b
 m
 =app/src/main/java/com/test/demo/features/base/BaseActivity.kt,e/c/ec9848199dcb7a12f02c6e031f383bd88bfc159c
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
+v
+Fapp/src/main/java/com/test/demo/features/product/list/ProductItemVH.kt,a/3/a3ea2e4a138995d688cfd9a6c1486cdb8237f6a8
+m
+=app/src/main/java/com/test/demo/features/base/BaseFragment.kt,9/1/914a25f305611992312b14bde20e9482edc92fc0
+d
+4app/src/main/java/com/test/demo/utils/CommonUtils.kt,1/4/14f0f5d001364a95abd81e7ec2781eec8a0ab367
+h
+8app/src/main/java/com/test/demo/utils/SingleLiveEvent.kt,f/f/ff4c2632ca59868bc4a05a39195ae6318a7d99cb
+l
+<app/src/main/java/com/test/demo/features/auth/LoginModule.kt,5/8/5823b8b0a1d59b05203340efd100d91f2108cdea
+w
+Gapp/src/main/java/com/test/demo/features/product/list/ProductAdapter.kt,e/d/ed1855413746b0f1a2eea528040a34aca49588fe
+<
+build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
+@
+app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164

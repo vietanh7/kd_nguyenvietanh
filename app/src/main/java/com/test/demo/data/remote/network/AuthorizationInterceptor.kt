@@ -1,4 +1,4 @@
-package com.test.demo.data.remote
+package com.test.demo.data.remote.network
 
 import com.test.demo.data.local.PrefsHelper
 import okhttp3.Interceptor

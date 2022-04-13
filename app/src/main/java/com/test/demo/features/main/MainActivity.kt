@@ -15,17 +15,27 @@ import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
 import com.test.demo.features.base.BaseActivity
 import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestinationChangedListener {
 
     override val binding by viewBinding { ActivityMainBinding.inflate(layoutInflater) }
-    private val tokenExpiredDispatcher by inject<TokenExpiredDispatcher>()
-    private val navigationDispatcher by inject<NavigationDispatcher>()
-    private val prefsHelper: PrefsHelper by inject()
+
+    @Inject
+    lateinit var tokenExpiredDispatcher: TokenExpiredDispatcher
+
+    @Inject
+    lateinit var navigationDispatcher: NavigationDispatcher
+
+    @Inject
+    lateinit var prefsHelper: PrefsHelper
+
     private val navController
         get() = findNavController(R.id.fragment_container)
+
+    private val navHostFragment
+        get() = supportFragmentManager.findFragmentById(navHostId) as NavHostFragment
 
     override val navHostId: Int
         get() = R.id.fragment_container
@@ -36,25 +46,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestin
     }
 
     private fun setup() {
-        val startDestination = if (prefsHelper.getToken().isNullOrEmpty()) R.id.registerFragment else R.id.loginFragment
-        initNavigation(startDestination)
+        if (navHostFragment.navController.currentDestination == null) {
+            val startDestination = if (prefsHelper.getToken().isNullOrEmpty()) R.id.registerFragment else R.id.loginFragment
+            initNavigation(startDestination)
+        }
+
+        handleNavigationEvent()
         handleTokenExpired()
     }
 
     private fun initNavigation(start: Int) {
         // https://issuetracker.google.com/issues/142847973?pli=1
-        (supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment).apply {
+        navHostFragment.apply {
             val navInflater = navController.navInflater
             val navGraph = navInflater.inflate(R.navigation.nav_graph)
             navGraph.setStartDestination(start)
             navController.graph = navGraph
             navController.addOnDestinationChangedListener(this@MainActivity)
-        }
-
-        lifecycleScope.launchWhenResumed {
-            navigationDispatcher.eventFlow.collect {
-                it.invoke(navController)
-            }
         }
     }
 
@@ -64,6 +72,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestin
                 initNavigation(R.id.loginFragment)
                 navController.clearBackStack(R.id.loginFragment)
                 showMessage(getString(R.string.token_expired_message))
+            }
+        }
+    }
+
+    private fun handleNavigationEvent() {
+        lifecycleScope.launchWhenResumed {
+            navigationDispatcher.eventFlow.collect {
+                it.invoke(navController)
             }
         }
     }
