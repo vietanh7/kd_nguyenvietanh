@@ -73,6 +73,11 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.product_list_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
         val searchView = menu.findItem(R.id.search_menu).actionView as? SearchView ?: return
         searchView.maxWidth = Int.MAX_VALUE
         searchView.setOnQueryTextListener(this)
@@ -83,7 +88,6 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
                 binding.toolbar.title = getString(R.string.product_list_title)
             }
         }
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onRefresh() {

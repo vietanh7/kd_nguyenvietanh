@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.test.demo.BuildConfig
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.data.remote.ApiService
+import com.test.demo.data.remote.rx.RxApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -23,17 +25,25 @@ object NetworkModuleDagger {
 
     @Singleton
     @Provides
-    fun provideApiService(builder: Retrofit.Builder): ApiService {
-        return builder.baseUrl(BuildConfig.BASE_URL)
-            .build()
-            .create(ApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
     }
 
+    @Singleton
     @Provides
-    fun provideRetrofitBuilder(client: OkHttpClient, gson: Gson): Retrofit.Builder {
+    fun provideRxApiService(retrofit: Retrofit): RxApiService {
+        return retrofit.create(RxApiService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(client: OkHttpClient, gson: Gson): Retrofit {
         return Retrofit.Builder()
             .client(client)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+            .build()
     }
 
     @Provides

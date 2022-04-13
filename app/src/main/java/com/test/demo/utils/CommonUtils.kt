@@ -32,11 +32,23 @@ fun Context.hideKeyboard(view: View) {
 
 
 @ColorInt
-fun Context.getColorFromAttr(
+fun Context.getThemeColor(
     @AttrRes attrColor: Int,
     typedValue: TypedValue = TypedValue(),
     resolveRefs: Boolean = true
 ): Int {
     theme.resolveAttribute(attrColor, typedValue, resolveRefs)
     return typedValue.data
+}
+
+fun <T: Any?> T.toStringOrEmpty(): String {
+    return this?.toString().orEmpty()
+}
+
+fun String?.toIntOr(default: Int): Int {
+    if (this == null) {
+        return default
+    }
+
+    return this.toIntOrNull() ?: default
 }

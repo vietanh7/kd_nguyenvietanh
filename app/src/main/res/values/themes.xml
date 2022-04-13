@@ -28,9 +28,10 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_primaryInverse</item>
 
         <!--        Widget style-->
-        <item name="appBarLayoutStyle">@style/AppTheme.Appbar</item>
+        <item name="searchViewStyle">@style/Widget.Demo.SearchViewStyle</item>
+        <item name="appBarLayoutStyle">@style/Widget.Material3.AppBarLayout</item>
         <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
-        <item name="searchViewStyle">@style/Widget.SearchViewStyle</item>
+<!--        <item name="searchViewStyle">@style/Widget.Demo.SearchViewStyle</item>-->
         <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
     </style>
 
@@ -45,7 +46,7 @@
         <item name="tint">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="Widget.SearchViewStyle" parent="Widget.AppCompat.SearchView">
+    <style name="Widget.Demo.SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <!-- Gets rid of the "underline" in the text -->
         <item name="queryBackground">?attr/colorOnPrimary</item>
         <!-- Gets rid of the search icon when the SearchView is expanded -->

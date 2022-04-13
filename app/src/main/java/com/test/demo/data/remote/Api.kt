@@ -5,7 +5,8 @@ import com.test.demo.data.remote.model.Product
 import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
 import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
-import org.json.JSONObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
@@ -46,45 +47,24 @@ interface Api {
 
 class ApiIml @Inject constructor(
     private val apiService: ApiService,
+    private val errorMapper: ErrorMapper,
     private val tokenExpiredDispatcher: TokenExpiredDispatcher
 ) : Api {
 
-    private inline fun <T> wrapErrorCall(block: () -> T): T {
-        try {
-            return block.invoke()
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: HttpException) {
-            val apiError = parseHttpError(e)
-            if (apiError.message == TOKEN_EXPIRED_MESSAGE) {
-                tokenExpiredDispatcher.dispatch()
+    private suspend inline fun <T> wrapErrorCall(crossinline block: suspend () -> T): T {
+        return withContext(Dispatchers.IO) {
+            try {
+                block.invoke()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: HttpException) {
+                val apiError = errorMapper.mapError(e)
+                if (apiError.message == TOKEN_EXPIRED_MESSAGE) {
+                    tokenExpiredDispatcher.dispatch()
+                }
+
+                throw apiError
             }
-
-            throw e
-        }
-    }
-
-    private fun parseHttpError(error: HttpException): ApiError {
-        val errorBody = error.response()?.errorBody()?.string()
-        var message = error.message()
-        var code = error.code()
-        return try {
-            val json = JSONObject(errorBody!!)
-            if (json.has("error")) {
-                message = json.getString("error")
-            }
-
-            if (json.has("message")) {
-                message = json.getString("message")
-            }
-
-            if (json.has("code")) {
-                code = json.getInt("code")
-            }
-
-            return ApiError(message, code)
-        } catch (e: Exception) {
-            ApiError(error.message(), error.code())
         }
     }
 

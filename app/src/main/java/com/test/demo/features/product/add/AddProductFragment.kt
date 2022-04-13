@@ -11,11 +11,8 @@ import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.base.Event
 import com.test.demo.features.product.ProductEvent
 import com.test.demo.features.product.ProductViewModel
-import com.test.demo.utils.observeAsLiveData
-import com.test.demo.utils.setTextIfChanged
-import com.test.demo.utils.viewBinding
+import com.test.demo.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 @AndroidEntryPoint
 open class AddProductFragment: BaseFragment<AddProductFragmentBinding, ProductViewModel>(R.layout.add_product_fragment) {
@@ -31,12 +28,12 @@ open class AddProductFragment: BaseFragment<AddProductFragmentBinding, ProductVi
     private fun setup() {
         setupToolbar(binding.toolbar, getString(R.string.add_product))
         with(binding) {
-            skuText.doAfterTextChanged { viewModel.sku.value = it?.toString().orEmpty() }
-            productName.doAfterTextChanged { viewModel.productName.value = it?.toString().orEmpty() }
-            quantity.doAfterTextChanged { viewModel.quantity.value = it.toString().toIntOrNull() ?: 0 }
-            price.doAfterTextChanged { viewModel.price.value = it.toString().toIntOrNull() ?: 0 }
-            productUnit.doAfterTextChanged { viewModel.unit.value = it?.toString().orEmpty() }
-            productStatus.doAfterTextChanged { viewModel.status.value = it.toString().toIntOrNull() ?: 1 }
+            skuText.doAfterTextChanged { viewModel.sku.value = it.toStringOrEmpty() }
+            productName.doAfterTextChanged { viewModel.productName.value = it.toStringOrEmpty() }
+            quantity.doAfterTextChanged { viewModel.quantity.value = it.toString().toIntOr(0) }
+            price.doAfterTextChanged { viewModel.price.value = it.toString().toIntOr(0) }
+            productUnit.doAfterTextChanged { viewModel.unit.value = it.toStringOrEmpty() }
+            productStatus.doAfterTextChanged { viewModel.status.value = it.toString().toIntOr(1) }
 
             btnAdd.setOnClickListener { viewModel.addProduct() }
         }
