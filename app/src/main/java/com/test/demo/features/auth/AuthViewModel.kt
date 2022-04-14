@@ -9,6 +9,7 @@ import com.test.demo.data.remote.ApiError
 import com.test.demo.utils.dispatcher.NavigationDispatcher
 import com.test.demo.features.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject

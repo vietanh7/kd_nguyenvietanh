@@ -3,6 +3,7 @@ package com.test.demo.features.product
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.test.demo.data.remote.model.Product
+import com.test.demo.data.remote.rx.RxApi
 import com.test.demo.data.remote.rx.RxApiService
 import com.test.demo.features.base.rx.BaseRxViewModel
 import com.test.demo.utils.SingleLiveEvent
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class RxProductViewModel @Inject constructor(private val api: RxApiService) : BaseRxViewModel() {
+class RxProductViewModel @Inject constructor(private val api: RxApi) : BaseRxViewModel() {
     val listProduct = MutableStateFlow(emptyList<Product>())
     val needReload = SingleLiveEvent(true)
 
@@ -40,7 +41,7 @@ class RxProductViewModel @Inject constructor(private val api: RxApiService) : Ba
     }
 
     fun getProductList() {
-        api.getProductList()
+        api.getListProduct()
             .observeOn(AndroidSchedulers.mainThread())
             .bindLoading()
             .subscribe({

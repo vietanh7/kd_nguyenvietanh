@@ -37,8 +37,6 @@ z
 Japp/src/main/java/com/test/demo/utils/dispatcher/TokenExpiredDispatcher.kt,a/a/aa297f5b57ecc6652135209a3fbdfbfd3350732b
 x
 Happ/src/main/java/com/test/demo/utils/dispatcher/NavigationDispatcher.kt,2/b/2b8fda507ee9de7f6d50f2e1c418f616e4a42455
-n
->app/src/main/java/com/test/demo/data/remote/rx/RxApiService.kt,6/7/675e718da07180cb3385d09715e0b1d6f601d39a
 @
 app/build.gradle,f/4/f4a01d6a4fcb971362ec00a83903fd3902f52164
 m
@@ -61,5 +59,3 @@ q
 Aapp/src/main/java/com/test/demo/features/auth/RegisterFragment.kt,d/d/ddf62241d8451e50e66016d04607cb0d39310ddf
 m
 =app/src/main/java/com/test/demo/features/base/BaseFragment.kt,9/1/914a25f305611992312b14bde20e9482edc92fc0
-h
-8app/src/main/java/com/test/demo/data/DataModuleDagger.kt,5/7/57d7f1d425963b36ace49abb7b2def0b95186126
