@@ -16,16 +16,17 @@ import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.ProductListFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.product.ProductViewModel
+import com.test.demo.features.product.RxProductViewModel
 import com.test.demo.features.product.edit.EditProductFragment
 import com.test.demo.utils.hideKeyboard
 import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewModel>(R.layout.product_list_fragment),
+class ProductListFragment: BaseFragment<ProductListFragmentBinding, RxProductViewModel>(R.layout.product_list_fragment),
     SwipeRefreshLayout.OnRefreshListener, ProductAdapter.Callback, SearchView.OnQueryTextListener {
     override val binding: ProductListFragmentBinding by viewBinding { ProductListFragmentBinding.bind(it) }
-    override val viewModel: ProductViewModel by activityViewModels()
+    override val viewModel: RxProductViewModel by activityViewModels()
 
     var productAdapter: ProductAdapter? = null
 
@@ -100,7 +101,7 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        viewModel.searchQuery.value = newText.orEmpty()
+        viewModel.search(newText)
         return true
     }
 

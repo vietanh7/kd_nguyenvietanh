@@ -31,4 +31,24 @@ data class Product(
     val success: Boolean?,
     @SerializedName("message")
     val message: String?
-): Parcelable
+): Parcelable {
+
+    companion object {
+        fun empty(): Product {
+            return Product(
+                createdAt = "",
+                id = -1,
+                image = null,
+                price = 0,
+                productName = "",
+                qty = 0,
+                sku = "",
+                status = 1,
+                unit = "",
+                updatedAt = "",
+                success = true,
+                message = null
+            )
+        }
+    }
+}

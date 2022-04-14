@@ -6,18 +6,25 @@ import androidx.core.view.isInvisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import com.test.demo.R
+import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.AddProductFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.base.Event
 import com.test.demo.features.product.ProductEvent
 import com.test.demo.features.product.ProductViewModel
+import com.test.demo.features.product.RxProductViewModel
 import com.test.demo.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-open class AddProductFragment: BaseFragment<AddProductFragmentBinding, ProductViewModel>(R.layout.add_product_fragment) {
-    override val binding: AddProductFragmentBinding by viewBinding { AddProductFragmentBinding.bind(it) }
-    override val viewModel: ProductViewModel by activityViewModels()
+open class AddProductFragment :
+    BaseFragment<AddProductFragmentBinding, RxProductViewModel>(R.layout.add_product_fragment) {
+    override val binding: AddProductFragmentBinding by viewBinding {
+        AddProductFragmentBinding.bind(
+            it
+        )
+    }
+    override val viewModel: RxProductViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,24 +35,33 @@ open class AddProductFragment: BaseFragment<AddProductFragmentBinding, ProductVi
     private fun setup() {
         setupToolbar(binding.toolbar, getString(R.string.add_product))
         with(binding) {
-            skuText.doAfterTextChanged { viewModel.sku.value = it.toStringOrEmpty() }
-            productName.doAfterTextChanged { viewModel.productName.value = it.toStringOrEmpty() }
-            quantity.doAfterTextChanged { viewModel.quantity.value = it.toString().toIntOr(0) }
-            price.doAfterTextChanged { viewModel.price.value = it.toString().toIntOr(0) }
-            productUnit.doAfterTextChanged { viewModel.unit.value = it.toStringOrEmpty() }
-            productStatus.doAfterTextChanged { viewModel.status.value = it.toString().toIntOr(1) }
+            skuText.doAfterTextChanged { updateState { copy(sku = it.toStringOrEmpty()) } }
+            productName.doAfterTextChanged { updateState { copy(productName = it.toStringOrEmpty()) } }
+            quantity.doAfterTextChanged { updateState { copy(qty = it.toString().toIntOr(0)) } }
+            price.doAfterTextChanged { updateState { copy(price = it.toString().toIntOr(0)) } }
+            productUnit.doAfterTextChanged { updateState { copy(unit = it.toStringOrEmpty()) } }
+            productStatus.doAfterTextChanged { updateState { copy(status = it.toString().toIntOr(1)) } }
 
             btnAdd.setOnClickListener { viewModel.addProduct() }
         }
     }
 
+    private inline fun updateState(block: Product.() -> Product) {
+        val currentProduct = viewModel.productStateLiveData.value ?: return
+        viewModel.setSate(currentProduct.block())
+    }
+
     private fun observeVM() {
-        viewModel.sku.observeAsLiveData(viewLifecycleOwner) { binding.skuText.setTextIfChanged(it) }
-        viewModel.productName.observeAsLiveData(viewLifecycleOwner) { binding.productName.setTextIfChanged(it) }
-        viewModel.quantity.observeAsLiveData(viewLifecycleOwner) { binding.quantity.setTextIfChanged(it.toString()) }
-        viewModel.price.observeAsLiveData(viewLifecycleOwner) { binding.price.setTextIfChanged(it.toString()) }
-        viewModel.unit.observeAsLiveData(viewLifecycleOwner) { binding.productUnit.setTextIfChanged(it) }
-        viewModel.status.observeAsLiveData(viewLifecycleOwner) { binding.productStatus.setTextIfChanged(it.toString()) }
+        viewModel.productStateLiveData.observe {
+            with(binding) {
+                skuText.setTextIfChanged(it.sku)
+                productName.setTextIfChanged(it.productName)
+                quantity.setTextIfChanged(it.qty.toString())
+                price.setTextIfChanged(it.price.toString())
+                productUnit.setTextIfChanged(it.unit)
+                productStatus.setTextIfChanged(it.status.toString())
+            }
+        }
     }
 
 

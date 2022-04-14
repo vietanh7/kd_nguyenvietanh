@@ -15,8 +15,7 @@ open class BaseRxViewModel: BaseViewModel() {
 
     fun <T : Any> Single<T>.bindLoading(): Single<T> {
         return this.doOnSubscribe { isLoading.value = true }
-            .doOnSuccess { isLoading.value = false }
-            .doOnError { isLoading.value = false }
+            .doAfterTerminate { isLoading.value = false }
     }
 
     open fun handleError(error: Throwable) {

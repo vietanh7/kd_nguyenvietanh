@@ -1,5 +1,6 @@
 package com.test.demo.features.product
 
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.model.Product
@@ -18,14 +19,14 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
     val listProduct = MutableStateFlow(emptyList<Product>())
     val needReload = SingleLiveEvent(true)
 
-    val sku = MutableStateFlow("")
-    val productName = MutableStateFlow("")
-    val quantity = MutableStateFlow(0)
-    val price = MutableStateFlow(0)
-    val unit = MutableStateFlow("")
-    val status = MutableStateFlow(0)
+    private val productState = MutableStateFlow(Product.empty())
+    val productStateLiveData = productState.asLiveData()
 
-    val searchQuery = MutableStateFlow("")
+    fun setSate(product: Product) {
+        productState.value = product
+    }
+
+    private val searchQuery = MutableStateFlow<String?>("")
 
     init {
         searchQuery.debounce(500)
@@ -33,6 +34,9 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
             .launchIn(viewModelScope)
     }
 
+    fun search(query: String?) {
+        searchQuery.value = query
+    }
 
     fun getProductList() {
         launchLoading {
@@ -74,13 +78,14 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
     fun addProduct() {
         launchLoading {
             validateProduct()
+            val currentProduct = productState.value
             api.addProduct(
-                sku.value,
-                productName.value,
-                quantity.value,
-                price.value,
-                unit.value,
-                status.value
+                currentProduct.sku,
+                currentProduct.productName,
+                currentProduct.qty,
+                currentProduct.price,
+                currentProduct.unit,
+                currentProduct.status
             )
 
             event.setValue(ProductEvent.AddSuccess)
@@ -91,13 +96,14 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
     fun editProduct() {
         launchLoading {
             validateProduct()
+            val currentProduct = productState.value
             api.updateProduct(
-                sku.value,
-                productName.value,
-                quantity.value,
-                price.value,
-                unit.value,
-                status.value
+                currentProduct.sku,
+                currentProduct.productName,
+                currentProduct.qty,
+                currentProduct.price,
+                currentProduct.unit,
+                currentProduct.status
             )
 
             event.setValue(ProductEvent.EditSuccess)
@@ -107,16 +113,11 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
 
     fun clearEditData() {
         initialized = false
-        sku.value = ""
-        productName.value = ""
-        quantity.value = 0
-        price.value = 0
-        unit.value = ""
-        status.value = 0
+        productState.value = Product.empty()
     }
 
     private fun validateProduct() {
-        if (price.value < 0 || quantity.value < 0) {
+        if (productState.value.price < 0 || productState.value.qty < 0) {
             throw IllegalArgumentException("Invalid product details, please check again!")
         }
     }
@@ -125,12 +126,14 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
     fun init(product: Product) {
         if (!initialized) {
             initialized = true
-            sku.value = product.sku
-            productName.value = product.productName
-            quantity.value = product.qty
-            price.value = product.price
-            unit.value = product.unit
-            status.value = product.status
+            productState.value = Product.empty().copy(
+                productName = product.productName,
+                sku = product.sku,
+                qty = product.qty,
+                price = product.price,
+                unit = product.unit,
+                status = product.status
+            )
         }
     }
 }
