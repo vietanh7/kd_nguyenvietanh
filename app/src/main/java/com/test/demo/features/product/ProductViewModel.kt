@@ -3,7 +3,7 @@ package com.test.demo.features.product
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.test.demo.data.remote.model.Product
-import com.test.demo.data.remote.Api
+import com.test.demo.data.repo.ProductRepo
 import com.test.demo.features.base.BaseViewModel
 import com.test.demo.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel() {
+class ProductViewModel @Inject constructor(private val repo: ProductRepo) : BaseViewModel() {
     val listProduct = MutableStateFlow(emptyList<Product>())
     val needReload = SingleLiveEvent(true)
 
@@ -27,7 +27,7 @@ class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel
         productState.value = product
     }
 
-    private val searchQuery = MutableStateFlow<String?>("")
+    private val searchQuery = MutableStateFlow<String?>(null)
 
     init {
         searchQuery.debounce(500)
@@ -39,8 +39,8 @@ class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel
         searchQuery.value = query
     }
 
-    fun getProductList() {
-        api.getListProduct()
+    fun getProductList(forceRefresh: Boolean = false) {
+        repo.getListProduct(forceRefresh)
             .observeOn(AndroidSchedulers.mainThread())
             .bindLoading()
             .subscribe({
@@ -50,14 +50,13 @@ class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel
     }
 
     fun deleteProduct(sku: String) {
-        api.deleteProduct(sku)
+        repo.deleteProduct(sku)
             .observeOn(AndroidSchedulers.mainThread())
             .bindLoading()
             .subscribe({ product ->
-                val index = listProduct.value.indexOfFirst { it.id == product.id }
+                val deletedItem = listProduct.value.find { it.id == product.id } ?: return@subscribe
                 val newList = listProduct.value.toMutableList()
-                newList.removeAt(index)
-
+                newList.remove(deletedItem)
                 listProduct.value = newList
             }, ::handleError)
             .addToCompositeDisposable()
@@ -65,13 +64,17 @@ class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel
 
     private var searchDisposable: Disposable? = null
     fun searchBySku(sku: String?) {
-        if (sku.isNullOrEmpty()) {
+        if (sku == null) {
+            return
+        }
+
+        if (sku.isEmpty()) {
             getProductList()
             return
         }
 
         searchDisposable?.dispose()
-        searchDisposable = api.searchProduct(sku)
+        searchDisposable = repo.searchProduct(sku)
             .observeOn(AndroidSchedulers.mainThread())
             .bindLoading()
             .subscribe({ product ->
@@ -89,14 +92,8 @@ class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel
         }
 
         val currentProduct = productState.value
-        api.addProduct(
-            currentProduct.sku,
-            currentProduct.productName,
-            currentProduct.qty,
-            currentProduct.price,
-            currentProduct.unit,
-            currentProduct.status
-        ).observeOn(AndroidSchedulers.mainThread())
+        repo.addProduct(currentProduct)
+            .observeOn(AndroidSchedulers.mainThread())
             .bindLoading()
             .subscribe({
                 event.setValue(ProductEvent.AddSuccess)
@@ -112,14 +109,8 @@ class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel
         }
 
         val currentProduct = productState.value
-        api.updateProduct(
-            currentProduct.sku,
-            currentProduct.productName,
-            currentProduct.qty,
-            currentProduct.price,
-            currentProduct.unit,
-            currentProduct.status
-        ).observeOn(AndroidSchedulers.mainThread())
+        repo.updateProduct(currentProduct)
+            .observeOn(AndroidSchedulers.mainThread())
             .bindLoading()
             .subscribe({
                 event.setValue(ProductEvent.EditSuccess)

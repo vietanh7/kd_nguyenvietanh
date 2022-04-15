@@ -3,10 +3,6 @@ i
 9app/src/main/java/com/test/demo/features/base/ListItem.kt,7/6/763ffd94e41ced5b4a72306599459171a477cae2
 P
  app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
-<
-build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
-q
-Aapp/src/main/java/com/test/demo/features/product/ProductModule.kt,7/6/76d80bb72feed2ae3fb110147b3c413d9b4143de
 m
 =app/src/main/java/com/test/demo/features/main/MainActivity.kt,c/0/c0ddd1f47ddd02b53c6895f628ad66c3712adeae
 A

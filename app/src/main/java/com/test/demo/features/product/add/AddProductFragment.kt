@@ -37,7 +37,7 @@ open class AddProductFragment :
             skuText.doAfterTextChanged { updateState { copy(sku = it.toStringOrEmpty()) } }
             productName.doAfterTextChanged { updateState { copy(productName = it.toStringOrEmpty()) } }
             quantity.doAfterTextChanged { updateState { copy(qty = it.toString().toIntOr(0)) } }
-            price.doAfterTextChanged { updateState { copy(price = it.toString().toIntOr(0)) } }
+            price.doAfterTextChanged { updateState { copy(price = it.toString().toLongOrNull() ?: 0) } }
             productUnit.doAfterTextChanged { updateState { copy(unit = it.toStringOrEmpty()) } }
             productStatus.doAfterTextChanged { updateState { copy(status = it.toString().toIntOr(1)) } }
 

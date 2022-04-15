@@ -35,7 +35,7 @@ interface ApiService {
         @Field("sku") sku: String,
         @Field("product_name") productName: String,
         @Field("qty") quantity: Int,
-        @Field("price") price: Int,
+        @Field("price") price: Long,
         @Field("unit") unit: String,
         @Field("status") status: Int,
     ): Single<Product>
@@ -46,7 +46,7 @@ interface ApiService {
         @Field("sku") sku: String,
         @Field("product_name") productName: String,
         @Field("qty") quantity: Int,
-        @Field("price") price: Int,
+        @Field("price") price: Long,
         @Field("unit") unit: String,
         @Field("status") status: Int,
     ): Single<Product>

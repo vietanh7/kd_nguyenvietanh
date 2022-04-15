@@ -3,6 +3,7 @@ package com.test.demo.data.remote.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import com.test.demo.data.remote.ApiError
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -14,7 +15,7 @@ data class Product(
     @SerializedName("image")
     val image: String?,
     @SerializedName("price")
-    val price: Int,
+    val price: Long,
     @SerializedName("product_name")
     val productName: String,
     @SerializedName("qty")
@@ -33,13 +34,21 @@ data class Product(
     val message: String?
 ): Parcelable {
 
+    fun validate(): Product {
+        if (success == false) {
+            throw ApiError(message.orEmpty(), 400)
+        }
+
+        return this
+    }
+
     companion object {
         fun empty(): Product {
             return Product(
                 createdAt = "",
                 id = -1,
                 image = null,
-                price = 0,
+                price = 0L,
                 productName = "",
                 qty = 0,
                 sku = "",

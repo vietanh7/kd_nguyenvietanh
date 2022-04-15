@@ -23,7 +23,7 @@ interface Api {
         sku: String,
         productName: String,
         quantity: Int,
-        price: Int,
+        price: Long,
         unit: String,
         status: Int
     ): Single<Product>
@@ -32,7 +32,7 @@ interface Api {
         sku: String,
         productName: String,
         quantity: Int,
-        price: Int,
+        price: Long,
         unit: String,
         status: Int
     ): Single<Product>
@@ -83,42 +83,39 @@ class ApiIml @Inject constructor(
     override fun deleteProduct(sku: String): Single<Product> {
         return service.deleteProduct(sku).onErrorResumeNext(::mapError)
             .wrapError()
+            .map { it.validate() }
     }
 
     override fun addProduct(
         sku: String,
         productName: String,
         quantity: Int,
-        price: Int,
+        price: Long,
         unit: String,
         status: Int
     ): Single<Product> {
         return service.addProduct(sku, productName, quantity, price, unit, status)
             .wrapError()
+            .map { it.validate() }
     }
 
     override fun updateProduct(
         sku: String,
         productName: String,
         quantity: Int,
-        price: Int,
+        price: Long,
         unit: String,
         status: Int
     ): Single<Product> {
         return service.updateProduct(sku, productName, quantity, price, unit, status)
             .wrapError()
+            .map { it.validate() }
     }
 
     override fun searchProduct(sku: String): Single<Product> {
         return service.searchProduct(sku)
             .wrapError()
-            .map { product ->
-                if (product.success == false) {
-                    throw ApiError(product.message.orEmpty(), 400)
-                }
-
-                product
-            }
+            .map { it.validate() }
     }
 
 }
