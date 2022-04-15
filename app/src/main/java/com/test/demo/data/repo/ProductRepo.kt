@@ -3,19 +3,18 @@ package com.test.demo.data.repo
 import com.test.demo.data.ThrottleHelper
 import com.test.demo.data.db.AppDb
 import com.test.demo.data.db.product.ProductEntity
-import com.test.demo.data.remote.Api
-import com.test.demo.data.remote.ApiConstants
+import com.test.demo.data.remote.api.ApiConstants
 import com.test.demo.data.remote.model.Product
+import com.test.demo.data.remote.product.ProductApi
 import dagger.hilt.android.scopes.ViewModelScoped
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import timber.log.Timber
 import javax.inject.Inject
 
 @ViewModelScoped
 class ProductRepo @Inject constructor(
     private val db: AppDb,
-    private val api: Api,
+    private val api: ProductApi,
     private val throttleHelper: ThrottleHelper
 ) {
     companion object {
@@ -27,7 +26,6 @@ class ProductRepo @Inject constructor(
     fun getListProduct(force: Boolean = false): Single<List<Product>> {
         val shouldRefresh = throttleHelper.canRefresh(ApiConstants.GET_PRODUCTS_ENDPOINT, PRODUCT_REFRESH_TIMEOUT)
         val resultSingle = if (force || shouldRefresh) {
-            Timber.e("Get from network")
             api.getListProduct().flatMap { products ->
                 val entities = products.map { ProductEntity.from(it) }
                 productDao.clearProduct()
@@ -35,7 +33,6 @@ class ProductRepo @Inject constructor(
                     .toSingle { products }
             }
         } else {
-            Timber.e("Get from cache")
             productDao
                 .getAllProduct().map { entities -> entities.map { it.toProduct() } }
         }
