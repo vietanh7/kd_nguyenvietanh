@@ -12,19 +12,18 @@ import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.base.Event
 import com.test.demo.features.product.ProductEvent
 import com.test.demo.features.product.ProductViewModel
-import com.test.demo.features.product.RxProductViewModel
 import com.test.demo.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 open class AddProductFragment :
-    BaseFragment<AddProductFragmentBinding, RxProductViewModel>(R.layout.add_product_fragment) {
+    BaseFragment<AddProductFragmentBinding, ProductViewModel>(R.layout.add_product_fragment) {
     override val binding: AddProductFragmentBinding by viewBinding {
         AddProductFragmentBinding.bind(
             it
         )
     }
-    override val viewModel: RxProductViewModel by activityViewModels()
+    override val viewModel: ProductViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

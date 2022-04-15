@@ -40,15 +40,3 @@ fun Context.getThemeColor(
     theme.resolveAttribute(attrColor, typedValue, resolveRefs)
     return typedValue.data
 }
-
-fun <T: Any?> T.toStringOrEmpty(): String {
-    return this?.toString().orEmpty()
-}
-
-fun String?.toIntOr(default: Int): Int {
-    if (this == null) {
-        return default
-    }
-
-    return this.toIntOrNull() ?: default
-}

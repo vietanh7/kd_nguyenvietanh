@@ -3,6 +3,7 @@ package com.test.demo.data.remote
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
+import io.reactivex.rxjava3.core.Single
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -11,46 +12,46 @@ import retrofit2.http.POST
 interface ApiService {
 
     @FormUrlEncoded
-    @POST("api/auth/login")
-    suspend fun login(@Field("email") email: String, @Field("password") password: String): Token
+    @POST(ApiConstants.LOGIN_ENDPOINT)
+    fun login(@Field("email") email: String, @Field("password") password: String): Single<Token>
 
     @FormUrlEncoded
-    @POST("api/register")
-    suspend fun register(
+    @POST(ApiConstants.REGISTER_ENDPOINT)
+    fun register(
         @Field("email") email: String,
         @Field("password") password: String
-    ): RegisterResponse
+    ): Single<RegisterResponse>
 
-    @GET("api/items")
-    suspend fun getProductList(): List<Product>
-
-    @FormUrlEncoded
-    @POST("api/item/delete")
-    suspend fun deleteProduct(@Field("sku") sku: String): Product
+    @GET(ApiConstants.GET_PRODUCTS_ENDPOINT)
+    fun getProductList(): Single<List<Product>>
 
     @FormUrlEncoded
-    @POST("api/item/add")
-    suspend fun addProduct(
+    @POST(ApiConstants.DELETE_PRODUCT_ENDPOINT)
+    fun deleteProduct(@Field("sku") sku: String): Single<Product>
+
+    @FormUrlEncoded
+    @POST(ApiConstants.ADD_PRODUCT_ENDPOINT)
+    fun addProduct(
         @Field("sku") sku: String,
         @Field("product_name") productName: String,
         @Field("qty") quantity: Int,
         @Field("price") price: Int,
         @Field("unit") unit: String,
         @Field("status") status: Int,
-    ): Product
+    ): Single<Product>
 
     @FormUrlEncoded
-    @POST("api/item/update")
-    suspend fun updateProduct(
+    @POST(ApiConstants.UPDATE_PRODUCT_ENDPOINT)
+    fun updateProduct(
         @Field("sku") sku: String,
         @Field("product_name") productName: String,
         @Field("qty") quantity: Int,
         @Field("price") price: Int,
         @Field("unit") unit: String,
         @Field("status") status: Int,
-    ): Product
+    ): Single<Product>
 
     @FormUrlEncoded
-    @POST("api/item/search")
-    suspend fun searchProduct(@Field("sku") sku: String): Product
+    @POST(ApiConstants.SEARCH_PRODUCT_ENDPOINT)
+    fun searchProduct(@Field("sku") sku: String): Single<Product>
 }

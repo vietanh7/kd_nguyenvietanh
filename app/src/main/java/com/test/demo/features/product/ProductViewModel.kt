@@ -2,13 +2,13 @@ package com.test.demo.features.product
 
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.model.Product
+import com.test.demo.data.remote.Api
 import com.test.demo.features.base.BaseViewModel
 import com.test.demo.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel() {
+class ProductViewModel @Inject constructor(private val api: Api) : BaseViewModel() {
     val listProduct = MutableStateFlow(emptyList<Product>())
     val needReload = SingleLiveEvent(true)
 
@@ -40,76 +40,92 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
     }
 
     fun getProductList() {
-        launchLoading {
-            listProduct.value = api.getListProduct()
-        }
+        api.getListProduct()
+            .observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({
+                listProduct.value = it
+            }, ::handleError)
+            .addToCompositeDisposable()
     }
 
     fun deleteProduct(sku: String) {
-        launchJob {
-            val deletedProduct = api.deleteProduct(sku)
-            val index = listProduct.value.indexOfFirst { it.id == deletedProduct.id }
-            val newList = listProduct.value.toMutableList()
-            newList.removeAt(index)
+        api.deleteProduct(sku)
+            .observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({ product ->
+                val index = listProduct.value.indexOfFirst { it.id == product.id }
+                val newList = listProduct.value.toMutableList()
+                newList.removeAt(index)
 
-            listProduct.value = newList
-        }
+                listProduct.value = newList
+            }, ::handleError)
+            .addToCompositeDisposable()
     }
 
-    private var searchJob: Job? = null
+    private var searchDisposable: Disposable? = null
     fun searchBySku(sku: String?) {
         if (sku.isNullOrEmpty()) {
             getProductList()
             return
         }
 
-        searchJob?.cancel()
-        searchJob = launchLoading {
-            try {
-                val product = api.searchProduct(sku)
+        searchDisposable?.dispose()
+        searchDisposable = api.searchProduct(sku)
+            .observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({ product ->
                 listProduct.value = listOf(product)
-            } catch (e: Exception) {
+            }, {
                 listProduct.value = emptyList()
-            }
-        }
+            })
     }
 
 
     // ---Add, edit product
     fun addProduct() {
-        launchLoading {
-            validateProduct()
-            val currentProduct = productState.value
-            api.addProduct(
-                currentProduct.sku,
-                currentProduct.productName,
-                currentProduct.qty,
-                currentProduct.price,
-                currentProduct.unit,
-                currentProduct.status
-            )
-
-            event.setValue(ProductEvent.AddSuccess)
-            needReload.setValue(true)
+        if (!isValidProduct()) {
+            handleError(IllegalArgumentException("Invalid product details, please check again!"))
         }
+
+        val currentProduct = productState.value
+        api.addProduct(
+            currentProduct.sku,
+            currentProduct.productName,
+            currentProduct.qty,
+            currentProduct.price,
+            currentProduct.unit,
+            currentProduct.status
+        ).observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({
+                event.setValue(ProductEvent.AddSuccess)
+                needReload.setValue(true)
+            }, ::handleError)
+            .addToCompositeDisposable()
     }
 
     fun editProduct() {
-        launchLoading {
-            validateProduct()
-            val currentProduct = productState.value
-            api.updateProduct(
-                currentProduct.sku,
-                currentProduct.productName,
-                currentProduct.qty,
-                currentProduct.price,
-                currentProduct.unit,
-                currentProduct.status
-            )
-
-            event.setValue(ProductEvent.EditSuccess)
-            needReload.setValue(true)
+        if (!isValidProduct()) {
+            handleError(IllegalArgumentException("Invalid product details, please check again!"))
+            return
         }
+
+        val currentProduct = productState.value
+        api.updateProduct(
+            currentProduct.sku,
+            currentProduct.productName,
+            currentProduct.qty,
+            currentProduct.price,
+            currentProduct.unit,
+            currentProduct.status
+        ).observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({
+                event.setValue(ProductEvent.EditSuccess)
+                needReload.setValue(true)
+            }, ::handleError)
+            .addToCompositeDisposable()
     }
 
     fun clearEditData() {
@@ -117,10 +133,12 @@ class ProductViewModel @Inject constructor(private val api: Api): BaseViewModel(
         productState.value = Product.empty()
     }
 
-    private fun validateProduct() {
+    private fun isValidProduct(): Boolean {
         if (productState.value.price < 0 || productState.value.qty < 0) {
-            throw IllegalArgumentException("Invalid product details, please check again!")
+            return false
         }
+
+        return true
     }
 
     private var initialized = false

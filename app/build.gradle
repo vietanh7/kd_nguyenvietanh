@@ -70,6 +70,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
 
     // Navigation
     def nav_version = "2.4.2"
@@ -111,8 +112,6 @@ dependencies {
     testImplementation('org.threeten:threetenbp:1.5.1') {
         exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
     }
-
-    implementation("com.michael-bull.kotlin-result:kotlin-result:1.1.12")
 
     // dialog
     implementation 'com.afollestad.material-dialogs:core:3.3.0'

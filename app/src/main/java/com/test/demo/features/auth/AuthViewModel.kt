@@ -6,24 +6,27 @@ import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.data.remote.Api
 import com.test.demo.data.remote.ApiError
-import com.test.demo.utils.dispatcher.NavigationDispatcher
 import com.test.demo.features.base.BaseViewModel
+import com.test.demo.utils.dispatcher.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val navigationDispatcher: NavigationDispatcher,
     private val api: Api,
-    private val prefsHelper: PrefsHelper
+    private val prefsHelper: PrefsHelper,
+    private val navigationDispatcher: NavigationDispatcher
 ) : BaseViewModel() {
 
     val email = MutableStateFlow("test.task@klikdokter.com")
     val password = MutableStateFlow("T3stKl1kd0kt3r")
-    val isOk = combine(email, password, this::canLogin).asLiveData()
+
+    val isOk = combine(email, password, ::canLogin)
+        .asLiveData(createExceptionHandler())
+
 
     private fun canLogin(email: String, password: String): Boolean {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -38,29 +41,33 @@ class AuthViewModel @Inject constructor(
     }
 
     fun login() {
-        if (isLoading.value) {
-            return
-        }
+        api.login(email.value, password.value)
+            .observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({ token ->
+                if (token.token.isEmpty()) {
+                    errorEvent.setValue(IllegalArgumentException("Token is empty"))
+                    return@subscribe
+                }
 
-        launchLoading {
-            val token = api.login(email.value, password.value)
-            if (token.token.isEmpty()) {
-                throw IllegalArgumentException("Token is empty")
-            }
-
-            prefsHelper.saveToken(token.token)
-            navigationDispatcher.dispatch { it.navigate(R.id.action_loginFragment_to_productListFragment) }
-        }
+                prefsHelper.saveToken(token.token)
+                navigationDispatcher.dispatch { it.navigate(R.id.action_loginFragment_to_productListFragment) }
+            }, ::handleError)
+            .addToCompositeDisposable()
     }
 
     fun register() {
-        launchLoading {
-            val user = api.register(email.value, password.value)
-            if (!user.success) {
-                throw ApiError("Failed to register", -1)
-            }
+        api.register(email.value, password.value)
+            .observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({
+                if (!it.success) {
+                    errorEvent.setValue(ApiError("Failed to register", -1))
+                    return@subscribe
+                }
 
-            event.setValue(AuthEvent.RegisterSuccessEvent)
-        }
+                event.setValue(AuthEvent.RegisterSuccessEvent)
+            }, ::handleError)
+            .addToCompositeDisposable()
     }
 }

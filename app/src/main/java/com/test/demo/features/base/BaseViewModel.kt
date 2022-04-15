@@ -3,15 +3,17 @@ package com.test.demo.features.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
 import com.test.demo.utils.SingleLiveEvent
-import kotlinx.coroutines.*
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
-abstract class BaseViewModel : ViewModel() {
+open class BaseViewModel: ViewModel() {
+
     protected val isLoading = MutableStateFlow(false)
     val loading = isLoading.asLiveData()
 
@@ -21,31 +23,20 @@ abstract class BaseViewModel : ViewModel() {
     protected val event = SingleLiveEvent<Event>()
     fun event(): LiveData<Event> = event
 
-    fun launchJob(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        errorHandler: CoroutineExceptionHandler = createExceptionHandler(),
-        block: suspend CoroutineScope.() -> Unit
-    ): Job {
-        return viewModelScope.launch(context + errorHandler, start, block)
+    protected val compositeDisposable = CompositeDisposable()
+
+    fun Disposable.addToCompositeDisposable(): Boolean {
+        return compositeDisposable.add(this)
     }
 
-    fun launchLoading(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        errorHandler: CoroutineExceptionHandler = createExceptionHandler(),
-        block: suspend CoroutineScope.() -> Unit
-    ): Job {
-        return viewModelScope.launch(context + errorHandler, start) {
-            isLoading.value = true
-            try {
-                block()
-            } finally {
-                isLoading.value = false
-            }
-        }
+    fun <T : Any> Single<T>.bindLoading(): Single<T> {
+        return this.doOnSubscribe { isLoading.value = true }
+            .doAfterTerminate { isLoading.value = false }
     }
 
+    open fun handleError(error: Throwable) {
+        errorEvent.postValue(error)
+    }
 
     protected open fun createExceptionHandler() =
         CoroutineExceptionHandler { _, throwable ->
@@ -54,4 +45,9 @@ abstract class BaseViewModel : ViewModel() {
                 errorEvent.postValue(throwable)
             }
         }
+
+    override fun onCleared() {
+        compositeDisposable.dispose()
+        super.onCleared()
+    }
 }

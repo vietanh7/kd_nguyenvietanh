@@ -15,9 +15,9 @@ import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment: BaseFragment<LoginFragmentBinding, RxAuthViewModel>(R.layout.login_fragment) {
+class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.login_fragment) {
     override val binding by viewBinding { LoginFragmentBinding.bind(it) }
-    override val viewModel: RxAuthViewModel by viewModels()
+    override val viewModel: AuthViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

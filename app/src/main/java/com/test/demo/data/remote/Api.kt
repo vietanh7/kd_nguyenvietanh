@@ -1,119 +1,124 @@
 package com.test.demo.data.remote
 
-import com.test.demo.data.remote.Api.Companion.TOKEN_EXPIRED_MESSAGE
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
 import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
-import java.util.concurrent.CancellationException
 import javax.inject.Inject
+import javax.inject.Singleton
 
 interface Api {
-    suspend fun login(email: String, password: String): Token
+    fun login(email: String, password: String): Single<Token>
 
-    suspend fun register(email: String, password: String): RegisterResponse
+    fun register(email: String, password: String): Single<RegisterResponse>
 
-    suspend fun getListProduct(): List<Product>
+    fun getListProduct(): Single<List<Product>>
 
-    suspend fun deleteProduct(sku: String): Product
+    fun deleteProduct(sku: String): Single<Product>
 
-    suspend fun addProduct(
+    fun addProduct(
         sku: String,
         productName: String,
         quantity: Int,
         price: Int,
         unit: String,
         status: Int
-    ): Product
+    ): Single<Product>
 
-    suspend fun updateProduct(
+    fun updateProduct(
         sku: String,
         productName: String,
         quantity: Int,
         price: Int,
         unit: String,
         status: Int
-    ): Product
+    ): Single<Product>
 
-    suspend fun searchProduct(sku: String): Product
-
-    companion object {
-        const val TOKEN_EXPIRED_MESSAGE = "Provided token is expired."
-    }
+    fun searchProduct(sku: String): Single<Product>
 }
 
+@Singleton
 class ApiIml @Inject constructor(
-    private val apiService: ApiService,
+    private val service: ApiService,
     private val errorMapper: ErrorMapper,
     private val tokenExpiredDispatcher: TokenExpiredDispatcher
 ) : Api {
 
-    private suspend inline fun <T> wrapErrorCall(crossinline block: suspend () -> T): T {
-        return withContext(Dispatchers.IO) {
-            try {
-                block.invoke()
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: HttpException) {
-                val apiError = errorMapper.mapError(e)
-                if (apiError.message == TOKEN_EXPIRED_MESSAGE) {
+    private fun <T : Any> mapError(err: Throwable): Single<T> {
+        return when (err) {
+            is HttpException -> {
+                val apiError = errorMapper.mapError(err)
+                if (apiError.message == ApiConstants.TOKEN_EXPIRED_MESSAGE) {
                     tokenExpiredDispatcher.dispatch()
                 }
 
-                throw apiError
+                Single.error(apiError)
             }
+            else -> Single.error(err)
         }
     }
 
-    override suspend fun login(email: String, password: String): Token {
-        return wrapErrorCall { apiService.login(email, password) }
+    private fun <T : Any> Single<T>.wrapError(): Single<T> {
+        return this.onErrorResumeNext(::mapError)
+            .subscribeOn(Schedulers.io())
     }
 
-    override suspend fun register(email: String, password: String): RegisterResponse {
-        return apiService.register(email, password)
+    override fun login(email: String, password: String): Single<Token> {
+        return service.login(email, password)
+            .wrapError()
     }
 
-    override suspend fun getListProduct(): List<Product> {
-        return wrapErrorCall { apiService.getProductList() }
+    override fun register(email: String, password: String): Single<RegisterResponse> {
+        return service.register(email, password).subscribeOn(Schedulers.io())
     }
 
-    override suspend fun deleteProduct(sku: String): Product {
-        return wrapErrorCall { apiService.deleteProduct(sku) }
+    override fun getListProduct(): Single<List<Product>> {
+        return service.getProductList().onErrorResumeNext(::mapError)
+            .wrapError()
     }
 
-    override suspend fun addProduct(
+    override fun deleteProduct(sku: String): Single<Product> {
+        return service.deleteProduct(sku).onErrorResumeNext(::mapError)
+            .wrapError()
+    }
+
+    override fun addProduct(
         sku: String,
         productName: String,
         quantity: Int,
         price: Int,
         unit: String,
         status: Int
-    ): Product {
-        return wrapErrorCall { apiService.addProduct(sku, productName, quantity, price, unit, status) }
+    ): Single<Product> {
+        return service.addProduct(sku, productName, quantity, price, unit, status)
+            .wrapError()
     }
 
-    override suspend fun updateProduct(
+    override fun updateProduct(
         sku: String,
         productName: String,
         quantity: Int,
         price: Int,
         unit: String,
         status: Int
-    ): Product {
-        return wrapErrorCall { apiService.updateProduct(sku, productName, quantity, price, unit, status) }
+    ): Single<Product> {
+        return service.updateProduct(sku, productName, quantity, price, unit, status)
+            .wrapError()
     }
 
-    override suspend fun searchProduct(sku: String): Product {
-        return wrapErrorCall {
-            val product = apiService.searchProduct(sku)
-            if (product.success == false) {
-                throw ApiError(product.message.orEmpty(), -1)
+    override fun searchProduct(sku: String): Single<Product> {
+        return service.searchProduct(sku)
+            .wrapError()
+            .map { product ->
+                if (product.success == false) {
+                    throw ApiError(product.message.orEmpty(), 400)
+                }
+
+                product
             }
-
-            product
-        }
     }
+
 }
