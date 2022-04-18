@@ -17,10 +17,13 @@ class ThrottleHelper @Inject constructor(@ApplicationContext context: Context) {
         val now = System.currentTimeMillis()
         val lastTime = prefs.getLong(key, -timeOut)
         if (now - lastTime > timeOut) {
-            prefs.edit { putLong(key, now)}
             return true
         }
 
         return false
+    }
+
+    fun updateRefreshTime(key: String) {
+        prefs.edit { putLong(key, System.currentTimeMillis())}
     }
 }

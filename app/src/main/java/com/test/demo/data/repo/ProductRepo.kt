@@ -9,7 +9,6 @@ import com.test.demo.data.remote.model.Product
 import dagger.hilt.android.scopes.ViewModelScoped
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
-import timber.log.Timber
 import javax.inject.Inject
 
 @ViewModelScoped
@@ -27,17 +26,17 @@ class ProductRepo @Inject constructor(
     fun getListProduct(force: Boolean = false): Single<List<Product>> {
         val shouldRefresh = throttleHelper.canRefresh(ApiConstants.GET_PRODUCTS_ENDPOINT, PRODUCT_REFRESH_TIMEOUT)
         val resultSingle = if (force || shouldRefresh) {
-            Timber.e("Get from network")
-            api.getListProduct().flatMap { products ->
-                val entities = products.map { ProductEntity.from(it) }
-                productDao.clearProduct()
-                    .andThen(productDao.saveProducts(entities))
-                    .toSingle { products }
-            }
+            api.getListProduct()
+                .flatMap { products ->
+                    val entities = products.map { ProductEntity.from(it) }
+                    productDao.clearProduct()
+                        .andThen(productDao.saveProducts(entities))
+                        .toSingle { products }
+                }.doOnSuccess { throttleHelper.updateRefreshTime(ApiConstants.GET_PRODUCTS_ENDPOINT) }
         } else {
-            Timber.e("Get from cache")
             productDao
-                .getAllProduct().map { entities -> entities.map { it.toProduct() } }
+                .getAllProduct()
+                .map { entities -> entities.map { it.toProduct() } }
         }
 
         return resultSingle.subscribeOn(Schedulers.io())

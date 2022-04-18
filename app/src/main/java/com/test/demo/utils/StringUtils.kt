@@ -13,5 +13,8 @@ fun String?.toIntOr(default: Int): Int {
 }
 
 fun String?.asBearerToken(): String {
+    if (this.isNullOrEmpty())
+        return ""
+
     return "Bearer ${this.orEmpty()}"
 }
