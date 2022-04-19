@@ -1,6 +1,6 @@
 package com.test.demo.features.auth
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import androidx.lifecycle.asLiveData
 import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
@@ -25,11 +25,11 @@ class AuthViewModel @Inject constructor(
     val password = MutableStateFlow("T3stKl1kd0kt3r")
 
     val isOk = combine(email, password, ::canLogin)
-        .asLiveData(createExceptionHandler())
+        .asLiveData()
 
 
     private fun canLogin(email: String, password: String): Boolean {
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()) {
             return false
         }
 

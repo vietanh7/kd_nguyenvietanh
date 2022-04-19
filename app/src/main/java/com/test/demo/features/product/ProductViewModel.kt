@@ -1,5 +1,6 @@
 package com.test.demo.features.product
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.test.demo.data.remote.model.Product
@@ -124,7 +125,8 @@ class ProductViewModel @Inject constructor(private val repo: ProductRepo) : Base
         productState.value = Product.empty()
     }
 
-    private fun isValidProduct(): Boolean {
+    @VisibleForTesting
+    fun isValidProduct(): Boolean {
         if (productState.value.price < 0 || productState.value.qty < 0) {
             return false
         }

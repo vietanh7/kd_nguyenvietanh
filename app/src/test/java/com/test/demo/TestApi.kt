@@ -37,33 +37,6 @@ class TestApi {
     val email = "test.task@klikdokter.com"
     val password = "T3stKl1kd0kt3r"
 
-    fun getRandomProduct(): Product {
-        val uuid = UUID.randomUUID().toString()
-        return Product(
-            createdAt = "",
-            updatedAt = "",
-            productName = uuid.takeLast(5),
-            price = Random.nextInt().toLong(),
-            unit = "Carbon",
-            qty = Random.nextInt(),
-            sku = uuid.takeLast(4),
-            status = 1,
-            success = true,
-            message = "",
-            image = null,
-            id = -1
-        )
-    }
-
-    private fun assertProduct(expected: Product, actual: Product?) {
-        assertEquals(expected.sku, actual?.sku)
-        assertEquals(expected.productName, actual?.productName)
-        assertEquals(expected.qty, actual?.qty)
-        assertEquals(expected.price, actual?.price)
-        assertEquals(expected.unit, actual?.unit)
-        assertEquals(expected.status, actual?.status)
-    }
-
     @Before
     fun setUpRxSchedulers() {
         given(mockPrefsHelper.getToken()).willReturn("")
