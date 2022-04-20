@@ -3,8 +3,7 @@ package com.test.demo
 import com.google.gson.Gson
 import com.test.demo.data.DataModule
 import com.test.demo.data.local.PrefsHelper
-import com.test.demo.data.remote.ApiError
-import com.test.demo.data.remote.model.Product
+import com.test.demo.data.remote.api.ApiError
 import com.test.demo.data.remote.network.NetworkModule
 import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
@@ -18,7 +17,6 @@ import org.mockito.BDDMockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 import retrofit2.HttpException
 import java.util.*
-import kotlin.random.Random
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull

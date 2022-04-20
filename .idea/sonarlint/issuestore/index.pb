@@ -21,11 +21,7 @@ i
 9app/src/main/java/com/test/demo/data/remote/ApiService.kt,6/c/6cdf35ad3be2be9daab7aeed6bf82239cad8d8b8
 t
 Dapp/src/main/java/com/test/demo/data/remote/network/NetworkModule.kt,d/5/d57b643050127163e523833d4a30f1c4660e551c
-l
-<app/src/main/java/com/test/demo/data/remote/model/Product.kt,0/c/0c516a62282807d7c9aa2cdf2e3c7111424b3f5d
 
 Oapp/src/main/java/com/test/demo/data/remote/network/AuthorizationInterceptor.kt,0/1/017eb6044f9464298e239278c000d0b867d944f8
 d
 4app/src/main/java/com/test/demo/utils/StringUtils.kt,2/5/2510c1146a3a1bcacbcec87f8b48b63c75f56d1f
-i
-9app/src/main/java/com/test/demo/data/local/PrefsHelper.kt,0/5/05e91629675f16abb010fcd4ce646dcf630d0237

@@ -3,7 +3,7 @@ package com.test.demo.data.remote.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.test.demo.data.remote.ApiError
+import com.test.demo.data.remote.api.ApiError
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

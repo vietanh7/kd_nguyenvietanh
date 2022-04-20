@@ -6,8 +6,8 @@ import com.test.demo.common.MainCoroutineRule
 import com.test.demo.common.RxMainDispatcherRule
 import com.test.demo.common.TestConst
 import com.test.demo.data.local.PrefsHelper
-import com.test.demo.data.remote.Api
-import com.test.demo.data.remote.ApiError
+import com.test.demo.data.remote.api.ApiError
+import com.test.demo.data.remote.auth.AuthApi
 import com.test.demo.data.remote.model.RegisterResponse
 import com.test.demo.data.remote.model.Token
 import com.test.demo.features.auth.AuthEvent
@@ -36,7 +36,7 @@ class AuthViewModelTest {
     private val navigationDispatcher = NavigationDispatcher()
 
     @Mock
-    lateinit var mockApi: Api
+    lateinit var mockApi: AuthApi
 
     @Mock
     lateinit var mockPrefHelper: PrefsHelper

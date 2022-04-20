@@ -4,9 +4,15 @@ import android.content.Context
 import com.test.demo.data.db.AppDb
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.data.local.PrefsHelperImpl
-import com.test.demo.data.remote.Api
-import com.test.demo.data.remote.ApiIml
-import com.test.demo.data.remote.ApiService
+import com.test.demo.data.remote.api.Api
+import com.test.demo.data.remote.api.ApiIml
+import com.test.demo.data.remote.api.ApiService
+import com.test.demo.data.remote.auth.AuthApi
+import com.test.demo.data.remote.auth.AuthApiImpl
+import com.test.demo.data.remote.auth.AuthService
+import com.test.demo.data.remote.product.ProductApi
+import com.test.demo.data.remote.product.ProductApiImpl
+import com.test.demo.data.remote.product.ProductApiService
 import com.test.demo.data.repo.ProductRepo
 import com.test.demo.data.repo.ProductRepoImpl
 import dagger.Binds
@@ -25,7 +31,13 @@ abstract class DataModule {
     abstract fun bindRxApiImpl(impl: ApiIml): Api
 
     @Binds
-    abstract fun bindPrefsHelperImpl(impl: PrefsHelperImpl): PrefsHelper
+    abstract fun bindAuthApi(impl: AuthApiImpl): AuthApi
+
+    @Binds
+    abstract fun bindProductApi(impl: ProductApiImpl): ProductApi
+
+    @Binds
+    abstract fun bindPrefsHelper(impl: PrefsHelperImpl): PrefsHelper
 
     @Binds
     abstract fun bindProductRepo(impl: ProductRepoImpl): ProductRepo
@@ -35,6 +47,18 @@ abstract class DataModule {
         @Provides
         fun provideApiService(retrofit: Retrofit): ApiService {
             return retrofit.create(ApiService::class.java)
+        }
+
+        @Singleton
+        @Provides
+        fun provideAuthService(retrofit: Retrofit): AuthService {
+            return retrofit.create(AuthService::class.java)
+        }
+
+        @Singleton
+        @Provides
+        fun provideProductService(retrofit: Retrofit): ProductApiService {
+            return retrofit.create(ProductApiService::class.java)
         }
 
         @Singleton

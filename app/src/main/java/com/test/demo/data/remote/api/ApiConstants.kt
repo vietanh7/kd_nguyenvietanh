@@ -1,4 +1,4 @@
-package com.test.demo.data.remote
+package com.test.demo.data.remote.api
 
 object ApiConstants {
     const val LOGIN_ENDPOINT = "api/auth/login"

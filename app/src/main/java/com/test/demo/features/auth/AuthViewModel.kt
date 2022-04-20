@@ -4,8 +4,8 @@ import androidx.core.util.PatternsCompat
 import androidx.lifecycle.asLiveData
 import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
-import com.test.demo.data.remote.Api
-import com.test.demo.data.remote.ApiError
+import com.test.demo.data.remote.api.ApiError
+import com.test.demo.data.remote.auth.AuthApi
 import com.test.demo.features.base.BaseViewModel
 import com.test.demo.utils.dispatcher.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val api: Api,
+    private val api: AuthApi,
     private val prefsHelper: PrefsHelper,
     private val navigationDispatcher: NavigationDispatcher
 ) : BaseViewModel() {

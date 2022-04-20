@@ -4,8 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asLiveData
 import com.test.demo.common.MainCoroutineRule
 import com.test.demo.common.RxMainDispatcherRule
-import com.test.demo.data.local.PrefsHelper
-import com.test.demo.data.remote.ApiError
+import com.test.demo.data.remote.api.ApiError
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.repo.ProductRepo
 import com.test.demo.features.product.ProductEvent

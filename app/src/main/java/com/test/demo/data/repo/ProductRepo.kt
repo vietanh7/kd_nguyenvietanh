@@ -3,10 +3,9 @@ package com.test.demo.data.repo
 import com.test.demo.data.ThrottleHelper
 import com.test.demo.data.db.AppDb
 import com.test.demo.data.db.product.ProductEntity
-import com.test.demo.data.remote.Api
-import com.test.demo.data.remote.ApiConstants
+import com.test.demo.data.remote.api.ApiConstants
 import com.test.demo.data.remote.model.Product
-import dagger.hilt.android.scopes.ViewModelScoped
+import com.test.demo.data.remote.product.ProductApi
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
@@ -27,7 +26,7 @@ interface ProductRepo {
 @Singleton
 class ProductRepoImpl @Inject constructor(
     private val db: AppDb,
-    private val api: Api,
+    private val api: ProductApi,
     private val throttleHelper: ThrottleHelper
 ): ProductRepo {
     companion object {

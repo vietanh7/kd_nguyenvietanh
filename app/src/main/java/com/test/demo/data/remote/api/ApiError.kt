@@ -1,4 +1,4 @@
-package com.test.demo.data.remote
+package com.test.demo.data.remote.api
 
 import java.io.IOException
 
