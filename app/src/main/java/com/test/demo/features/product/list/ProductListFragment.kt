@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.ProductListFragmentBinding
@@ -58,8 +59,6 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
         viewModel.listProductLiveData.observe {
             productAdapter?.submitList(it)
         }
-
-        viewModel.needReload.observe { viewModel.getProductList() }
     }
 
     override fun handleLoading(isLoading: Boolean) {

@@ -3,7 +3,6 @@ package com.test.demo.features.product
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.repo.ProductRepo
 import com.test.demo.features.base.BaseViewModel
@@ -20,7 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    private val repo: ProductRepo
+    private val repo: ProductRepo,
+    private val navigationDispatcher: NavigationDispatcher
     ) : BaseViewModel() {
 
     private val listProduct = MutableStateFlow(emptyList<Product>())
@@ -40,6 +40,8 @@ class ProductViewModel @Inject constructor(
     }
 
     init {
+        getProductList()
+
         searchQuery.debounce(500)
             .onEach { searchBySku(it) }
             .launchIn(viewModelScope)
@@ -107,7 +109,7 @@ class ProductViewModel @Inject constructor(
             .bindLoading()
             .subscribe({
                 event.setValue(ProductEvent.AddSuccess)
-                needReload.setValue(true)
+                getProductList()
             }, ::handleError)
             .addToCompositeDisposable()
     }
@@ -124,7 +126,7 @@ class ProductViewModel @Inject constructor(
             .bindLoading()
             .subscribe({
                 event.setValue(ProductEvent.EditSuccess)
-                needReload.setValue(true)
+                getProductList()
             }, ::handleError)
             .addToCompositeDisposable()
     }

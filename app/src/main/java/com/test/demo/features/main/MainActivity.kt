@@ -10,9 +10,9 @@ import androidx.navigation.fragment.NavHostFragment
 import com.test.demo.R
 import com.test.demo.data.local.PrefsHelper
 import com.test.demo.databinding.ActivityMainBinding
+import com.test.demo.features.base.BaseActivity
 import com.test.demo.utils.dispatcher.NavigationDispatcher
 import com.test.demo.utils.dispatcher.TokenExpiredDispatcher
-import com.test.demo.features.base.BaseActivity
 import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

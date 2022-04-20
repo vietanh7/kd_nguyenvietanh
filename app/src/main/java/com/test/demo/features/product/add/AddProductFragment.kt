@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.isInvisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.AddProductFragmentBinding
@@ -68,7 +69,8 @@ open class AddProductFragment :
     override fun onNewEvent(event: Event) {
         when (event) {
             is ProductEvent.AddSuccess -> {
-                showMessage(getString(R.string.add_product_success_greeting))
+                showSnackbar(getString(R.string.add_product_success_greeting))
+                findNavController().navigateUp()
             }
 
             else -> super.onNewEvent(event)

@@ -1,5 +1,6 @@
 package com.test.demo.features.base
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,7 +10,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.test.demo.R
+import com.test.demo.utils.getThemeColor
 
 abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): Fragment(layoutRes) {
     abstract val binding: B
@@ -68,6 +71,13 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
             .setTitle("Message")
             .setMessage(message)
             .setNeutralButton("Ok") { _, _ -> action.run() }
+            .show()
+    }
+
+    fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT)
+            .setTextColor(requireContext().getThemeColor(com.google.android.material.R.attr.colorOnPrimary))
+            .setBackgroundTint(requireContext().getThemeColor(com.google.android.material.R.attr.colorPrimary))
             .show()
     }
 

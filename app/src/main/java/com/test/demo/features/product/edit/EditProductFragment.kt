@@ -2,6 +2,7 @@ package com.test.demo.features.product.edit
 
 import android.os.Bundle
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.features.base.Event
@@ -29,7 +30,8 @@ class EditProductFragment: AddProductFragment() {
     override fun onNewEvent(event: Event) {
         when(event) {
             is ProductEvent.EditSuccess -> {
-                showMessage(getString(R.string.update_product_success_greeting))
+                showSnackbar(getString(R.string.update_product_success_greeting))
+                findNavController().navigateUp()
             }
 
             else -> super.onNewEvent(event)
