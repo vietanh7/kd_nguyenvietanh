@@ -1,8 +1,6 @@
 
 i
 9app/src/main/java/com/test/demo/features/base/ListItem.kt,7/6/763ffd94e41ced5b4a72306599459171a477cae2
-P
- app/src/main/AndroidManifest.xml,8/c/8c55c3ccc257e5907959013f99656e4c8ec3903e
 A
 gradle.properties,2/a/2afbb999f001938c88fa43fc2ef52abf0f8213e4
 X

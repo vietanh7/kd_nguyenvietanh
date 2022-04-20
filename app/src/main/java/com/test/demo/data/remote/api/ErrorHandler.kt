@@ -9,7 +9,7 @@ import javax.inject.Inject
 class ErrorHandler @Inject constructor(private val tokenExpiredDispatcher: TokenExpiredDispatcher) {
     fun mapError(error: HttpException): ApiError {
         val errorBody = error.response()?.errorBody()?.string()
-        var message = error.message()
+        var message = error.response()?.message().orEmpty()
         var code = error.code()
         return try {
             val json = JSONObject(errorBody!!)
@@ -25,13 +25,9 @@ class ErrorHandler @Inject constructor(private val tokenExpiredDispatcher: Token
                 code = json.getInt("code")
             }
 
-            if (message.isEmpty()) {
-                message = error.message()
-            }
-
             return ApiError(message, code)
         } catch (e: Exception) {
-            ApiError(error.message(), error.code())
+            ApiError(message, error.code())
         }
     }
 

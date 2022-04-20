@@ -6,6 +6,8 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnLayout
+import androidx.core.view.updatePadding
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
@@ -20,7 +22,6 @@ import com.test.demo.utils.hideKeyboard
 import com.test.demo.utils.throttleClick
 import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 
 @AndroidEntryPoint
 class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewModel>(R.layout.product_list_fragment),
@@ -47,6 +48,9 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
             productRc.setHasFixedSize(true)
 
             btnAdd.throttleClick { toAddProduct() }
+            btnAdd.doOnLayout {
+                productRc.updatePadding(bottom = root.height - it.top)
+            }
         }
     }
 
