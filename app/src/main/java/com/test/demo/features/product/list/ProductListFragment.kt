@@ -12,7 +12,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.snackbar.Snackbar
 import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.ProductListFragmentBinding
@@ -66,12 +65,12 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
     }
 
     private fun toAddProduct() {
-        viewModel.setSate(Product.empty())
+        viewModel.setState(Product.empty())
         findNavController().navigate(R.id.action_productList_to_add)
     }
 
     private fun toEditProduct(product: Product) {
-        viewModel.setSate(product)
+        viewModel.setState(product)
         findNavController().navigate(R.id.action_productList_to_edit, bundleOf(EditProductFragment.PRODUCT_ARGS_KEY to product))
     }
 

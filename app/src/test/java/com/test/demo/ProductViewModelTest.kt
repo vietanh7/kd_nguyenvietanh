@@ -1,7 +1,6 @@
 package com.test.demo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.asLiveData
 import com.test.demo.common.MainCoroutineRule
 import com.test.demo.common.RxMainDispatcherRule
 import com.test.demo.data.remote.api.ApiError
@@ -16,7 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import kotlin.test.*
@@ -41,6 +40,7 @@ class ProductViewModelTest {
     @Before
     fun setup() {
         MockitoAnnotations.openMocks(this)
+        `when`(repo.getListProduct()).thenReturn(Single.just(emptyList()))
         productViewModel = ProductViewModel(repo)
     }
 
@@ -52,10 +52,10 @@ class ProductViewModelTest {
     @Test
     fun `test get list product success`() {
         val mockProduct = listOf<Product>()
-        Mockito.`when`(repo.getListProduct()).thenReturn(Single.just(mockProduct))
+        `when`(repo.getListProduct()).thenReturn(Single.just(mockProduct))
 
         productViewModel.getProductList()
-        Mockito.verify(repo).getListProduct()
+        verify(repo, times(2)).getListProduct()
         val productList = productViewModel.listProductLiveData.observeAndGet()
         assertNotNull(productList)
         assertTrue(productList.isEmpty())
@@ -64,7 +64,7 @@ class ProductViewModelTest {
     @Test
     fun `test init product`() {
         val product = getRandomProduct()
-        productViewModel.init(product)
+        productViewModel.setState(product)
         val initProduct = productViewModel.productStateLiveData.observeAndGet()
 
         assertProduct(product, initProduct)
@@ -73,12 +73,12 @@ class ProductViewModelTest {
     @Test
     fun `test add product success`() {
         val product = getRandomProduct()
-        productViewModel.init(product)
+        productViewModel.setState(product)
 
         val currentProduct = productViewModel.productStateLiveData.observeAndGet()
         assertNotNull(currentProduct)
 
-        Mockito.`when`(repo.addProduct(currentProduct)).thenReturn(Single.just(currentProduct))
+        `when`(repo.addProduct(currentProduct)).thenReturn(Single.just(currentProduct))
         productViewModel.addProduct()
         val event = productViewModel.event().observeAndGet()
         assertNotNull(event)
@@ -93,12 +93,12 @@ class ProductViewModelTest {
     @Test
     fun `test update product success`() {
         val product = getRandomProduct()
-        productViewModel.init(product)
+        productViewModel.setState(product)
 
         val currentProduct = productViewModel.productStateLiveData.observeAndGet()
         assertNotNull(currentProduct)
 
-        Mockito.`when`(repo.updateProduct(currentProduct)).thenReturn(Single.just(currentProduct))
+        `when`(repo.updateProduct(currentProduct)).thenReturn(Single.just(currentProduct))
         productViewModel.editProduct()
         val event = productViewModel.event().observeAndGet()
         assertNotNull(event)
@@ -112,23 +112,23 @@ class ProductViewModelTest {
     @Test
     fun `test product invalid`() {
         val product = getRandomProduct()
-        productViewModel.init(product)
+        productViewModel.setState(product)
         assertTrue(productViewModel.isValidProduct())
 
-        productViewModel.setSate(product.copy(price = -1, qty = 200))
+        productViewModel.setState(product.copy(price = -1, qty = 200))
         assertFalse(productViewModel.isValidProduct())
 
-        productViewModel.setSate(product.copy(price = 100, qty = -5))
+        productViewModel.setState(product.copy(price = 100, qty = -5))
         assertFalse(productViewModel.isValidProduct())
 
-        productViewModel.setSate(product.copy(price = -1, qty = -2))
+        productViewModel.setState(product.copy(price = -1, qty = -2))
         assertFalse(productViewModel.isValidProduct())
     }
 
     @Test
     fun `test search product success`() {
         val product = getRandomProduct()
-        Mockito.`when`(repo.searchProduct(product.sku)).thenReturn(Single.just(product))
+        `when`(repo.searchProduct(product.sku)).thenReturn(Single.just(product))
 
         productViewModel.searchBySku(product.sku)
         val productList = productViewModel.listProductLiveData.observeAndGet()
@@ -140,7 +140,7 @@ class ProductViewModelTest {
     @Test
     fun `test search product failed should return empty list`() {
         val mockError = ApiError("No product found", 400)
-        Mockito.`when`(repo.searchProduct(Mockito.anyString()))
+        `when`(repo.searchProduct(anyString()))
             .thenReturn(Single.error(mockError))
 
         productViewModel.searchBySku("sku")
@@ -152,12 +152,12 @@ class ProductViewModelTest {
     @Test
     fun `test add invalid product`() {
         val product = getRandomProduct().copy(price = -100)
-        productViewModel.init(product)
+        productViewModel.setState(product)
 
         val currentProduct = productViewModel.productStateLiveData.observeAndGet()
         assertNotNull(currentProduct)
 
-        Mockito.`when`(repo.addProduct(currentProduct)).thenReturn(Single.just(currentProduct))
+        `when`(repo.addProduct(currentProduct)).thenReturn(Single.just(currentProduct))
         productViewModel.addProduct()
         val error = productViewModel.error().observeAndGet()
         assertNotNull(error)
@@ -168,12 +168,12 @@ class ProductViewModelTest {
     fun `test add product fail`() {
         val mockError = ApiError("Mock error", 400)
         val product = getRandomProduct()
-        productViewModel.init(product)
+        productViewModel.setState(product)
 
         val currentProduct = productViewModel.productStateLiveData.observeAndGet()
         assertNotNull(currentProduct)
 
-        Mockito.`when`(repo.addProduct(currentProduct)).thenReturn(Single.error(mockError))
+        `when`(repo.addProduct(currentProduct)).thenReturn(Single.error(mockError))
         productViewModel.addProduct()
         val error = productViewModel.error().observeAndGet()
         assertNotNull(error)
@@ -186,12 +186,12 @@ class ProductViewModelTest {
     fun `test update product fail`() {
         val mockError = ApiError("Mock error", 400)
         val product = getRandomProduct()
-        productViewModel.init(product)
+        productViewModel.setState(product)
 
         val currentProduct = productViewModel.productStateLiveData.observeAndGet()
         assertNotNull(currentProduct)
 
-        Mockito.`when`(repo.updateProduct(currentProduct)).thenReturn(Single.error(mockError))
+        `when`(repo.updateProduct(currentProduct)).thenReturn(Single.error(mockError))
         productViewModel.editProduct()
         val error = productViewModel.error().observeAndGet()
         assertNotNull(error)
@@ -203,8 +203,8 @@ class ProductViewModelTest {
     @Test
     fun `test delete product success`() {
         val product = getRandomProduct()
-        Mockito.`when`(repo.getListProduct()).thenReturn(Single.just(listOf(product)))
-        Mockito.`when`(repo.deleteProduct(product.sku)).thenReturn(Single.just(product))
+        `when`(repo.getListProduct()).thenReturn(Single.just(listOf(product)))
+        `when`(repo.deleteProduct(product.sku)).thenReturn(Single.just(product))
 
         productViewModel.getProductList()
         productViewModel.deleteProduct(product.sku)

@@ -44,7 +44,7 @@ open class AddProductFragment :
 
     private inline fun updateState(block: Product.() -> Product) {
         val currentProduct = viewModel.productStateLiveData.value ?: return
-        viewModel.setSate(currentProduct.block())
+        viewModel.setState(currentProduct.block())
     }
 
     private fun observeVM() {
