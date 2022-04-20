@@ -10,6 +10,7 @@ import com.test.demo.R
 import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.utils.setTextIfChanged
+import com.test.demo.utils.throttleClick
 import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,7 +44,7 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.
             actionBtn.setOnClickListener { viewModel.login() }
             emailEdt.doAfterTextChanged { viewModel.setEmail(it?.toString()) }
             passwordEdt.doAfterTextChanged { viewModel.setPassword(it?.toString()) }
-            navigationText.setOnClickListener {
+            navigationText.throttleClick {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }
         }

@@ -3,22 +3,23 @@ package com.test.demo.features.product.list
 import androidx.recyclerview.widget.RecyclerView
 import com.test.demo.data.remote.model.Product
 import com.test.demo.databinding.ProductItemBinding
+import com.test.demo.utils.throttleClick
 
 class ProductItemVH(val binding: ProductItemBinding, val callback: ProductAdapter.Callback) :
     RecyclerView.ViewHolder(binding.root) {
     private var boundItem: Product? = null
 
     init {
-        itemView.setOnClickListener {
-            callback.onItemClick(boundItem ?: return@setOnClickListener)
+        itemView.throttleClick {
+            callback.onItemClick(boundItem ?: return@throttleClick)
         }
 
-        binding.btnDelete.setOnClickListener {
-            callback.deleteProductClick(boundItem ?: return@setOnClickListener)
+        binding.btnDelete.throttleClick {
+            callback.deleteProductClick(boundItem ?: return@throttleClick)
         }
 
-        binding.btnEdit.setOnClickListener {
-            callback.editProductClick(boundItem ?: return@setOnClickListener)
+        binding.btnEdit.throttleClick {
+            callback.editProductClick(boundItem ?: return@throttleClick)
         }
     }
 

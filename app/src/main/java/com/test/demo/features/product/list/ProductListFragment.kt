@@ -17,8 +17,10 @@ import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.product.ProductViewModel
 import com.test.demo.features.product.edit.EditProductFragment
 import com.test.demo.utils.hideKeyboard
+import com.test.demo.utils.throttleClick
 import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewModel>(R.layout.product_list_fragment),
@@ -44,7 +46,7 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
             productRc.adapter = ConcatAdapter(ProductHeaderAdapter(), productAdapter)
             productRc.setHasFixedSize(true)
 
-            btnAdd.setOnClickListener { toAddProduct() }
+            btnAdd.throttleClick { toAddProduct() }
         }
     }
 

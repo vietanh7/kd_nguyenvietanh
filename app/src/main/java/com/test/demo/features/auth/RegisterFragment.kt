@@ -11,6 +11,7 @@ import com.test.demo.databinding.LoginFragmentBinding
 import com.test.demo.features.base.BaseFragment
 import com.test.demo.features.base.Event
 import com.test.demo.utils.setTextIfChanged
+import com.test.demo.utils.throttleClick
 import com.test.demo.utils.toStringOrEmpty
 import com.test.demo.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +35,7 @@ class RegisterFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layo
             emailEdt.doAfterTextChanged { viewModel.setEmail(it.toStringOrEmpty()) }
             passwordEdt.doAfterTextChanged { viewModel.setPassword(it.toStringOrEmpty()) }
             navigationText.setText(R.string.login)
-            navigationText.setOnClickListener { findNavController().navigate(R.id.action_registerFragment_to_loginFragment) }
+            navigationText.throttleClick { findNavController().navigate(R.id.action_registerFragment_to_loginFragment) }
         }
     }
 
