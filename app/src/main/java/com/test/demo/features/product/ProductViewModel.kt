@@ -3,10 +3,12 @@ package com.test.demo.features.product
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.test.demo.R
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.repo.ProductRepo
 import com.test.demo.features.base.BaseViewModel
 import com.test.demo.utils.SingleLiveEvent
+import com.test.demo.utils.dispatcher.NavigationDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -17,18 +19,25 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductViewModel @Inject constructor(private val repo: ProductRepo) : BaseViewModel() {
-    val listProduct = MutableStateFlow(emptyList<Product>())
+class ProductViewModel @Inject constructor(
+    private val repo: ProductRepo
+    ) : BaseViewModel() {
+
+    private val listProduct = MutableStateFlow(emptyList<Product>())
+    val listProductLiveData = listProduct.asLiveData()
     val needReload = SingleLiveEvent(true)
 
     private val productState = MutableStateFlow(Product.empty())
     val productStateLiveData = productState.asLiveData()
 
+    private val searchQuery = MutableStateFlow<String?>(null)
+
+    private var searchDisposable: Disposable? = null
+    private var initialized = false
+
     fun setSate(product: Product) {
         productState.value = product
     }
-
-    private val searchQuery = MutableStateFlow<String?>(null)
 
     init {
         searchQuery.debounce(500)
@@ -38,6 +47,28 @@ class ProductViewModel @Inject constructor(private val repo: ProductRepo) : Base
 
     fun search(query: String?) {
         searchQuery.value = query
+    }
+
+    @VisibleForTesting
+    fun searchBySku(sku: String?) {
+        if (sku == null) {
+            return
+        }
+
+        if (sku.isEmpty()) {
+            getProductList()
+            return
+        }
+
+        searchDisposable?.dispose()
+        searchDisposable = repo.searchProduct(sku)
+            .observeOn(AndroidSchedulers.mainThread())
+            .bindLoading()
+            .subscribe({ product ->
+                listProduct.value = listOf(product)
+            }, {
+                listProduct.value = emptyList()
+            })
     }
 
     fun getProductList(forceRefresh: Boolean = false) {
@@ -61,28 +92,6 @@ class ProductViewModel @Inject constructor(private val repo: ProductRepo) : Base
                 listProduct.value = newList
             }, ::handleError)
             .addToCompositeDisposable()
-    }
-
-    private var searchDisposable: Disposable? = null
-    fun searchBySku(sku: String?) {
-        if (sku == null) {
-            return
-        }
-
-        if (sku.isEmpty()) {
-            getProductList()
-            return
-        }
-
-        searchDisposable?.dispose()
-        searchDisposable = repo.searchProduct(sku)
-            .observeOn(AndroidSchedulers.mainThread())
-            .bindLoading()
-            .subscribe({ product ->
-                listProduct.value = listOf(product)
-            }, {
-                listProduct.value = emptyList()
-            })
     }
 
 
@@ -120,11 +129,6 @@ class ProductViewModel @Inject constructor(private val repo: ProductRepo) : Base
             .addToCompositeDisposable()
     }
 
-    fun clearEditData() {
-        initialized = false
-        productState.value = Product.empty()
-    }
-
     @VisibleForTesting
     fun isValidProduct(): Boolean {
         if (productState.value.price < 0 || productState.value.qty < 0) {
@@ -134,18 +138,10 @@ class ProductViewModel @Inject constructor(private val repo: ProductRepo) : Base
         return true
     }
 
-    private var initialized = false
     fun init(product: Product) {
         if (!initialized) {
             initialized = true
-            productState.value = Product.empty().copy(
-                productName = product.productName,
-                sku = product.sku,
-                qty = product.qty,
-                price = product.price,
-                unit = product.unit,
-                status = product.status
-            )
+            productState.value = product
         }
     }
 }

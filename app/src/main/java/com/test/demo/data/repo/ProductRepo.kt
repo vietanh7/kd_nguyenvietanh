@@ -2,6 +2,7 @@ package com.test.demo.data.repo
 
 import com.test.demo.data.ThrottleHelper
 import com.test.demo.data.db.AppDb
+import com.test.demo.data.db.product.ProductDao
 import com.test.demo.data.db.product.ProductEntity
 import com.test.demo.data.remote.api.ApiConstants
 import com.test.demo.data.remote.model.Product
@@ -25,15 +26,10 @@ interface ProductRepo {
 
 @Singleton
 class ProductRepoImpl @Inject constructor(
-    private val db: AppDb,
+    private val productDao: ProductDao,
     private val api: ProductApi,
     private val throttleHelper: ThrottleHelper
 ): ProductRepo {
-    companion object {
-        const val PRODUCT_REFRESH_TIMEOUT = 60 * 1000L
-    }
-
-    private val productDao = db.productDao()
 
     override fun getListProduct(force: Boolean): Single<List<Product>> {
         val shouldRefresh = throttleHelper.canRefresh(ApiConstants.GET_PRODUCTS_ENDPOINT, PRODUCT_REFRESH_TIMEOUT)
@@ -83,5 +79,9 @@ class ProductRepoImpl @Inject constructor(
 
     override fun searchProduct(sku: String): Single<Product> {
         return api.searchProduct(sku)
+    }
+
+    companion object {
+        const val PRODUCT_REFRESH_TIMEOUT = 60 * 1000L
     }
 }

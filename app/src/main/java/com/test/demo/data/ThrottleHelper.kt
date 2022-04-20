@@ -7,10 +7,6 @@ import javax.inject.Inject
 
 class ThrottleHelper @Inject constructor(@ApplicationContext context: Context) {
 
-    companion object {
-        private const val PREFS_FILE_NAME = "throttle-prefs"
-    }
-
     private val prefs = context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE)
 
     fun canRefresh(key: String, timeOut: Long): Boolean {
@@ -25,5 +21,9 @@ class ThrottleHelper @Inject constructor(@ApplicationContext context: Context) {
 
     fun updateRefreshTime(key: String) {
         prefs.edit { putLong(key, System.currentTimeMillis())}
+    }
+
+    companion object {
+        private const val PREFS_FILE_NAME = "throttle-prefs"
     }
 }

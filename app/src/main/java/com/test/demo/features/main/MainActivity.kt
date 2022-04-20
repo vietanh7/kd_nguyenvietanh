@@ -93,7 +93,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestin
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) {
-
-    }
+    override fun onDestinationChanged(controller: NavController, destination: NavDestination, arguments: Bundle?) = Unit
 }

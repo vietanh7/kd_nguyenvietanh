@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.test.demo.R
 import com.test.demo.databinding.LoginFragmentBinding
@@ -26,8 +25,8 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.
     }
 
     private fun observeVm() {
-        viewModel.email.asLiveData().observe { binding.emailEdt.setTextIfChanged(it)}
-        viewModel.password.asLiveData().observe { binding.passwordEdt.setTextIfChanged(it) }
+        viewModel.emailLiveData.observe { binding.emailEdt.setTextIfChanged(it)}
+        viewModel.passwordLiveData.observe { binding.passwordEdt.setTextIfChanged(it) }
         viewModel.isOk.observe { binding.actionBtn.isEnabled = it }
     }
 
@@ -42,8 +41,8 @@ class LoginFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layout.
             actionBtn.setText(R.string.login)
             navigationText.setText(R.string.register)
             actionBtn.setOnClickListener { viewModel.login() }
-            emailEdt.doAfterTextChanged { viewModel.email.value = it?.toString().orEmpty() }
-            passwordEdt.doAfterTextChanged { viewModel.password.value = it?.toString().orEmpty() }
+            emailEdt.doAfterTextChanged { viewModel.setEmail(it?.toString()) }
+            passwordEdt.doAfterTextChanged { viewModel.setPassword(it?.toString()) }
             navigationText.setOnClickListener {
                 findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
             }

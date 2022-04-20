@@ -21,11 +21,22 @@ class AuthViewModel @Inject constructor(
     private val navigationDispatcher: NavigationDispatcher
 ) : BaseViewModel() {
 
-    val email = MutableStateFlow("test.task@klikdokter.com")
-    val password = MutableStateFlow("T3stKl1kd0kt3r")
+    private val email = MutableStateFlow("test.task@klikdokter.com")
+    private val password = MutableStateFlow("T3stKl1kd0kt3r")
 
     val isOk = combine(email, password, ::canLogin)
         .asLiveData()
+
+    val emailLiveData = email.asLiveData()
+    val passwordLiveData = password.asLiveData()
+
+    fun setEmail(newEmail: String?) {
+        email.value = newEmail.orEmpty()
+    }
+
+    fun setPassword(newPassword: String?) {
+        password.value = newPassword.orEmpty()
+    }
 
 
     private fun canLogin(email: String, password: String): Boolean {

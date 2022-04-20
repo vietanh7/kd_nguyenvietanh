@@ -13,9 +13,7 @@ class ProductHeaderAdapter: RecyclerView.Adapter<ProductHeaderAdapter.HeaderVH>(
         return HeaderVH(binding.root)
     }
 
-    override fun onBindViewHolder(holder: HeaderVH, position: Int) {
-
-    }
+    override fun onBindViewHolder(holder: HeaderVH, position: Int) = Unit
 
     class HeaderVH(itemView: View): RecyclerView.ViewHolder(itemView) {
 

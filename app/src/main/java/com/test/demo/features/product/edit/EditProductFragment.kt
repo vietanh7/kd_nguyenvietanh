@@ -18,18 +18,12 @@ class EditProductFragment: AddProductFragment() {
     }
 
     private fun setup() {
-        initData()
         with(binding) {
             toolbar.title = getString(R.string.edit_product_title)
             btnAdd.text = getString(R.string.update_action)
             textFieldSku.isEnabled = false
             btnAdd.setOnClickListener { viewModel.editProduct() }
         }
-    }
-
-    private fun initData() {
-        val product = arguments?.getParcelable<Product>(PRODUCT_ARGS_KEY) ?: return
-        viewModel.init(product)
     }
 
     override fun onNewEvent(event: Event) {

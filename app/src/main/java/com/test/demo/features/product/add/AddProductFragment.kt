@@ -18,11 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 open class AddProductFragment :
     BaseFragment<AddProductFragmentBinding, ProductViewModel>(R.layout.add_product_fragment) {
-    override val binding: AddProductFragmentBinding by viewBinding {
-        AddProductFragmentBinding.bind(
-            it
-        )
-    }
+    override val binding by viewBinding (AddProductFragmentBinding::bind)
     override val viewModel: ProductViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -7,7 +7,6 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -24,10 +23,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewModel>(R.layout.product_list_fragment),
     SwipeRefreshLayout.OnRefreshListener, ProductAdapter.Callback, SearchView.OnQueryTextListener {
-    override val binding: ProductListFragmentBinding by viewBinding { ProductListFragmentBinding.bind(it) }
+    override val binding by viewBinding(ProductListFragmentBinding::bind)
     override val viewModel: ProductViewModel by activityViewModels()
 
-    var productAdapter: ProductAdapter? = null
+    private var productAdapter: ProductAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,7 +49,7 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
     }
 
     private fun observeVM() {
-        viewModel.listProduct.asLiveData().observe {
+        viewModel.listProductLiveData.observe {
             productAdapter?.submitList(it)
         }
 
@@ -62,12 +61,12 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
     }
 
     private fun toAddProduct() {
-        viewModel.clearEditData()
+        viewModel.setSate(Product.empty())
         findNavController().navigate(R.id.action_productList_to_add)
     }
 
     private fun toEditProduct(product: Product) {
-        viewModel.clearEditData()
+        viewModel.setSate(product)
         findNavController().navigate(R.id.action_productList_to_edit, bundleOf(EditProductFragment.PRODUCT_ARGS_KEY to product))
     }
 

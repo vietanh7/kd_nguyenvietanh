@@ -25,6 +25,10 @@ class ErrorHandler @Inject constructor(private val tokenExpiredDispatcher: Token
                 code = json.getInt("code")
             }
 
+            if (message.isEmpty()) {
+                message = error.message()
+            }
+
             return ApiError(message, code)
         } catch (e: Exception) {
             ApiError(error.message(), error.code())

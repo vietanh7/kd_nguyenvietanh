@@ -74,16 +74,16 @@ class AuthViewModelTest {
 
         val isOk = authViewModel.isOk
         authViewModel.isOk.observeForever(mockObserver)
-        authViewModel.email.value = TestConst.TEST_EMAIL
-        authViewModel.password.value = ""
+        authViewModel.setEmail(TestConst.TEST_EMAIL)
+        authViewModel.setPassword("")
         assertFalse(isOk.value!!)
 
-        authViewModel.email.value = "wrong email"
-        authViewModel.password.value = TestConst.TEST_PASSWORD
+        authViewModel.setEmail("wrong email")
+        authViewModel.setPassword(TestConst.TEST_PASSWORD)
         assertFalse(isOk.value!!)
 
-        authViewModel.email.value = TestConst.TEST_EMAIL
-        authViewModel.password.value = TestConst.TEST_PASSWORD
+        authViewModel.setEmail(TestConst.TEST_EMAIL)
+        authViewModel.setPassword(TestConst.TEST_PASSWORD)
         assertTrue(isOk.value!!)
 
         authViewModel.login()
@@ -102,8 +102,8 @@ class AuthViewModelTest {
 
         val isOk = authViewModel.isOk
         authViewModel.isOk.observeForever(mockObserver)
-        authViewModel.email.value = TestConst.TEST_EMAIL
-        authViewModel.password.value = TestConst.TEST_PASSWORD
+        authViewModel.setEmail(TestConst.TEST_EMAIL)
+        authViewModel.setPassword(TestConst.TEST_PASSWORD)
         assertTrue(isOk.value!!)
 
         authViewModel.login()
@@ -130,8 +130,8 @@ class AuthViewModelTest {
 
         val isOk = authViewModel.isOk
         authViewModel.isOk.observeForever(mockObserver)
-        authViewModel.email.value = TestConst.TEST_EMAIL
-        authViewModel.password.value = TestConst.TEST_PASSWORD
+        authViewModel.setEmail(TestConst.TEST_EMAIL)
+        authViewModel.setPassword(TestConst.TEST_PASSWORD)
         assertTrue(isOk.value!!)
 
         authViewModel.register()
@@ -148,8 +148,8 @@ class AuthViewModelTest {
             .thenReturn(Single.error(expectedException))
 
         authViewModel.isOk.observeForever(mockObserver)
-        authViewModel.email.value = TestConst.TEST_EMAIL
-        authViewModel.password.value = TestConst.TEST_PASSWORD
+        authViewModel.setEmail(TestConst.TEST_EMAIL)
+        authViewModel.setPassword(TestConst.TEST_PASSWORD)
         assertTrue(authViewModel.isOk.observeAndGet() == true)
 
         authViewModel.login()

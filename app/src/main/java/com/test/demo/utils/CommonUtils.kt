@@ -2,6 +2,7 @@ package com.test.demo.utils
 
 import android.app.Activity
 import android.content.Context
+import android.os.SystemClock
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -39,4 +40,19 @@ fun Context.getThemeColor(
 ): Int {
     theme.resolveAttribute(attrColor, typedValue, resolveRefs)
     return typedValue.data
+}
+
+fun View.throttleClick(throttleTime: Long = 400L, action: () -> Unit) {
+    this.setOnClickListener(object : View.OnClickListener {
+        private var lastClickTime: Long = 0
+
+        override fun onClick(v: View) {
+            if (SystemClock.elapsedRealtime() - lastClickTime < throttleTime) {
+                return
+            }
+
+            action()
+            lastClickTime = SystemClock.elapsedRealtime()
+        }
+    })
 }

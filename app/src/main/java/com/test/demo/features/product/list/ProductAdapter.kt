@@ -9,6 +9,15 @@ import com.test.demo.databinding.ProductItemBinding
 
 class ProductAdapter(val callback: Callback): ListAdapter<Product, ProductItemVH>(DiffItemCallback()) {
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductItemVH {
+        val binding = ProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ProductItemVH(binding, callback)
+    }
+
+    override fun onBindViewHolder(holder: ProductItemVH, position: Int) {
+        holder.bind(getItem(position))
+    }
+
     class DiffItemCallback: DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.id == newItem.id
@@ -18,15 +27,6 @@ class ProductAdapter(val callback: Callback): ListAdapter<Product, ProductItemVH
             return oldItem == newItem
         }
 
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductItemVH {
-        val binding = ProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ProductItemVH(binding, callback)
-    }
-
-    override fun onBindViewHolder(holder: ProductItemVH, position: Int) {
-        holder.bind(getItem(position))
     }
 
     interface Callback {

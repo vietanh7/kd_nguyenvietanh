@@ -66,5 +66,8 @@ abstract class DataModule {
         fun provideDb(@ApplicationContext context: Context): AppDb {
             return AppDb.provideDb(context)
         }
+
+        @Provides
+        fun provideProductDao(db: AppDb) = db.productDao()
     }
 }

@@ -6,7 +6,7 @@ import com.test.demo.databinding.ProductItemBinding
 
 class ProductItemVH(val binding: ProductItemBinding, val callback: ProductAdapter.Callback) :
     RecyclerView.ViewHolder(binding.root) {
-    var boundItem: Product? = null
+    private var boundItem: Product? = null
 
     init {
         itemView.setOnClickListener {

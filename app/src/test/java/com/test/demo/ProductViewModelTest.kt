@@ -56,7 +56,7 @@ class ProductViewModelTest {
 
         productViewModel.getProductList()
         Mockito.verify(repo).getListProduct()
-        val productList = productViewModel.listProduct.asLiveData().observeAndGet()
+        val productList = productViewModel.listProductLiveData.observeAndGet()
         assertNotNull(productList)
         assertTrue(productList.isEmpty())
     }
@@ -131,7 +131,7 @@ class ProductViewModelTest {
         Mockito.`when`(repo.searchProduct(product.sku)).thenReturn(Single.just(product))
 
         productViewModel.searchBySku(product.sku)
-        val productList = productViewModel.listProduct.asLiveData().observeAndGet()
+        val productList = productViewModel.listProductLiveData.observeAndGet()
         assertNotNull(productList)
         assertEquals(1, productList.size)
         assertProduct(product, productList.first())
@@ -144,7 +144,7 @@ class ProductViewModelTest {
             .thenReturn(Single.error(mockError))
 
         productViewModel.searchBySku("sku")
-        val productList = productViewModel.listProduct.asLiveData().observeAndGet()
+        val productList = productViewModel.listProductLiveData.observeAndGet()
         assertNotNull(productList)
         assertEquals(0, productList.size)
     }
@@ -203,11 +203,12 @@ class ProductViewModelTest {
     @Test
     fun `test delete product success`() {
         val product = getRandomProduct()
+        Mockito.`when`(repo.getListProduct()).thenReturn(Single.just(listOf(product)))
         Mockito.`when`(repo.deleteProduct(product.sku)).thenReturn(Single.just(product))
 
-        productViewModel.listProduct.value = listOf(product)
+        productViewModel.getProductList()
         productViewModel.deleteProduct(product.sku)
-        val productList = productViewModel.listProduct.asLiveData().observeAndGet()
+        val productList = productViewModel.listProductLiveData.observeAndGet()
 
         assertNotNull(productList)
         assertEquals(0, productList.size)
