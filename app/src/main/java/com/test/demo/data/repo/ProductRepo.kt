@@ -3,9 +3,10 @@ package com.test.demo.data.repo
 import com.test.demo.data.ThrottleHelper
 import com.test.demo.data.db.product.ProductDao
 import com.test.demo.data.db.product.ProductEntity
-import com.test.demo.data.remote.api.ApiConstants
-import com.test.demo.data.remote.model.Product
-import com.test.demo.data.remote.product.ProductApi
+import com.test.demo.data.api.common.ApiConstants
+import com.test.demo.data.api.common.ApiError
+import com.test.demo.data.api.model.Product
+import com.test.demo.data.api.product.ProductApi
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
@@ -76,9 +77,7 @@ class ProductRepoImpl @Inject constructor(
             }.subscribeOn(Schedulers.io())
     }
 
-    override fun searchProduct(sku: String): Single<Product> {
-        return api.searchProduct(sku)
-    }
+    override fun searchProduct(sku: String): Single<Product> = api.searchProduct(sku)
 
     companion object {
         const val PRODUCT_REFRESH_TIMEOUT = 60 * 1000L

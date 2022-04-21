@@ -2,9 +2,9 @@ package com.test.demo
 
 import com.google.gson.Gson
 import com.test.demo.data.DataModule
-import com.test.demo.data.local.PrefsHelper
-import com.test.demo.data.remote.api.ApiError
-import com.test.demo.data.remote.network.NetworkModule
+import com.test.demo.data.prefs.PrefsHelper
+import com.test.demo.data.api.common.ApiError
+import com.test.demo.data.api.network.NetworkModule
 import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import io.reactivex.rxjava3.schedulers.Schedulers

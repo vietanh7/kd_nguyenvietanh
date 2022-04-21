@@ -2,7 +2,7 @@ package com.test.demo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.test.demo.data.remote.model.Product
+import com.test.demo.data.api.model.Product
 import java.util.*
 import kotlin.random.Random
 import kotlin.test.assertEquals

@@ -3,7 +3,7 @@ package com.test.demo.data.db.product
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.test.demo.data.remote.model.Product
+import com.test.demo.data.api.model.Product
 
 
 @Entity(tableName = ProductEntity.TABLE_NAME)

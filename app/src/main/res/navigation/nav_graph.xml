@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.test.demo.features.auth.RegisterFragment"
+        android:name="com.test.demo.auth.ui.RegisterFragment"
         tools:layout="@layout/login_fragment"
         android:label="RegisterFragment" >
         <action
@@ -28,7 +28,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.test.demo.features.auth.LoginFragment"
+        android:name="com.test.demo.auth.ui.LoginFragment"
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/productListFragment"
-        android:name="com.test.demo.features.product.list.ProductListFragment"
+        android:name="com.test.demo.product.ui.list.ProductListFragment"
         android:label="ProductListFragment" >
         <action
             android:id="@+id/action_productList_to_add"
@@ -68,13 +68,13 @@
 
     <fragment
         android:id="@+id/editProductFragment"
-        android:name="com.test.demo.features.product.edit.EditProductFragment"
+        android:name="com.test.demo.product.ui.edit.EditProductFragment"
         android:label="EditProductFragment" >
     </fragment>
 
     <fragment
         android:id="@+id/addProductFragment"
-        android:name="com.test.demo.features.product.add.AddProductFragment"
+        android:name="com.test.demo.product.ui.add.AddProductFragment"
         android:label="AddProductFragment" >
     </fragment>
 

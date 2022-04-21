@@ -14,6 +14,8 @@ class SingleLiveEvent<T> : MutableLiveData<T> {
         mPending.set(true)
     }
 
+    fun dropEvent() = mPending.set(false)
+
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
         super.observe(owner) {
             if (mPending.compareAndSet(true, false)) {

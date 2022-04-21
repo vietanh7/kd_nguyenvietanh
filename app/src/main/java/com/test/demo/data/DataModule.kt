@@ -2,17 +2,14 @@ package com.test.demo.data
 
 import android.content.Context
 import com.test.demo.data.db.AppDb
-import com.test.demo.data.local.PrefsHelper
-import com.test.demo.data.local.PrefsHelperImpl
-import com.test.demo.data.remote.api.Api
-import com.test.demo.data.remote.api.ApiIml
-import com.test.demo.data.remote.api.ApiService
-import com.test.demo.data.remote.auth.AuthApi
-import com.test.demo.data.remote.auth.AuthApiImpl
-import com.test.demo.data.remote.auth.AuthService
-import com.test.demo.data.remote.product.ProductApi
-import com.test.demo.data.remote.product.ProductApiImpl
-import com.test.demo.data.remote.product.ProductApiService
+import com.test.demo.data.prefs.PrefsHelper
+import com.test.demo.data.prefs.PrefsHelperImpl
+import com.test.demo.data.api.auth.AuthApi
+import com.test.demo.data.api.auth.AuthApiImpl
+import com.test.demo.data.api.auth.AuthService
+import com.test.demo.data.api.product.ProductApi
+import com.test.demo.data.api.product.ProductApiImpl
+import com.test.demo.data.api.product.ProductApiService
 import com.test.demo.data.repo.ProductRepo
 import com.test.demo.data.repo.ProductRepoImpl
 import dagger.Binds
@@ -28,9 +25,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class DataModule {
     @Binds
-    abstract fun bindRxApiImpl(impl: ApiIml): Api
-
-    @Binds
     abstract fun bindAuthApi(impl: AuthApiImpl): AuthApi
 
     @Binds
@@ -43,12 +37,6 @@ abstract class DataModule {
     abstract fun bindProductRepo(impl: ProductRepoImpl): ProductRepo
 
     companion object {
-        @Singleton
-        @Provides
-        fun provideApiService(retrofit: Retrofit): ApiService {
-            return retrofit.create(ApiService::class.java)
-        }
-
         @Singleton
         @Provides
         fun provideAuthService(retrofit: Retrofit): AuthService {

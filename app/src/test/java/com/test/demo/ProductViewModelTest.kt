@@ -3,11 +3,11 @@ package com.test.demo
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.test.demo.common.MainCoroutineRule
 import com.test.demo.common.RxMainDispatcherRule
-import com.test.demo.data.remote.api.ApiError
-import com.test.demo.data.remote.model.Product
+import com.test.demo.data.api.common.ApiError
+import com.test.demo.data.api.model.Product
 import com.test.demo.data.repo.ProductRepo
-import com.test.demo.features.product.ProductEvent
-import com.test.demo.features.product.ProductViewModel
+import com.test.demo.product.ui.ProductEvent
+import com.test.demo.product.ui.ProductViewModel
 import io.reactivex.rxjava3.core.Single
 import org.junit.After
 import org.junit.Before
