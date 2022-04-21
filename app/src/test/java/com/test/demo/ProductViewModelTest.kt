@@ -83,10 +83,6 @@ class ProductViewModelTest {
         val event = productViewModel.event().observeAndGet()
         assertNotNull(event)
         assertTrue(event is ProductEvent.AddSuccess)
-
-        val needReloadEvent = productViewModel.needReload.observeAndGet()
-        assertNotNull(needReloadEvent)
-        assertTrue(needReloadEvent)
     }
 
 
@@ -103,10 +99,6 @@ class ProductViewModelTest {
         val event = productViewModel.event().observeAndGet()
         assertNotNull(event)
         assertTrue(event is ProductEvent.EditSuccess)
-
-        val needReloadEvent = productViewModel.needReload.observeAndGet()
-        assertNotNull(needReloadEvent)
-        assertTrue(needReloadEvent)
     }
 
     @Test

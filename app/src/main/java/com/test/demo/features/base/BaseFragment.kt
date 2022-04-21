@@ -1,6 +1,5 @@
 package com.test.demo.features.base
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -24,12 +23,14 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
     }
 
     private fun observeVM() {
-        viewModel.event().observe(viewLifecycleOwner) {
-            onNewEvent(it)
-        }
+        with(viewModel) {
+            event().observe(viewLifecycleOwner) {
+                onNewEvent(it)
+            }
 
-        viewModel.error().observe { showMessage(it.message.orEmpty()) }
-        viewModel.loading.observe(viewLifecycleOwner, this::handleLoading)
+            error().observe { showMessage(it.message.orEmpty()) }
+            loading.observe(viewLifecycleOwner, this@BaseFragment::handleLoading)
+        }
     }
 
     open fun onNewEvent(event: Event) = Unit
@@ -41,7 +42,7 @@ abstract class BaseFragment<B: ViewBinding, V: BaseViewModel>(layoutRes: Int): F
         val entryCount = if (activity.navHostId == null) {
             activity.supportFragmentManager.backStackEntryCount
         } else {
-            activity.supportFragmentManager.findFragmentById(R.id.fragment_container)
+            activity.supportFragmentManager.findFragmentById(R.id.nav_host)
                 ?.childFragmentManager?.backStackEntryCount ?: 0
         }
 

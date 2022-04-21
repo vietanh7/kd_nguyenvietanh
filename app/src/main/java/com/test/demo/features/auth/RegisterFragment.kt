@@ -40,9 +40,11 @@ class RegisterFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layo
     }
 
     private fun observeVm() {
-        viewModel.emailLiveData.observe { binding.emailEdt.setTextIfChanged(it)}
-        viewModel.passwordLiveData.observe { binding.passwordEdt.setTextIfChanged(it) }
-        viewModel.isOk.observe { binding.actionBtn.isEnabled = it }
+        with(viewModel) {
+            emailLiveData.observe { binding.emailEdt.setTextIfChanged(it)}
+            passwordLiveData.observe { binding.passwordEdt.setTextIfChanged(it) }
+            isOk.observe { binding.actionBtn.isEnabled = it }
+        }
     }
 
     override fun onNewEvent(event: Event) {
@@ -58,7 +60,9 @@ class RegisterFragment: BaseFragment<LoginFragmentBinding, AuthViewModel>(R.layo
     }
 
     override fun handleLoading(isLoading: Boolean) {
-        binding.actionBtn.isEnabled = !isLoading
-        binding.loadingIndicator.isVisible = isLoading
+        with(binding) {
+            actionBtn.isEnabled = !isLoading
+            loadingIndicator.isVisible = isLoading
+        }
     }
 }

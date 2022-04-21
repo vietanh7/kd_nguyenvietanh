@@ -21,9 +21,9 @@ class EditProductFragment: AddProductFragment() {
     private fun setup() {
         with(binding) {
             toolbar.title = getString(R.string.edit_product_title)
-            btnAdd.text = getString(R.string.update_action)
+            actionBtn.text = getString(R.string.update_action)
             textFieldSku.isEnabled = false
-            btnAdd.setOnClickListener { viewModel.editProduct() }
+            actionBtn.setOnClickListener { viewModel.editProduct() }
         }
     }
 
@@ -40,14 +40,5 @@ class EditProductFragment: AddProductFragment() {
 
     companion object {
         const val PRODUCT_ARGS_KEY = "PRODUCT"
-
-        fun newInstance(product: Product): EditProductFragment {
-            val args = Bundle(1).apply {
-                putParcelable(PRODUCT_ARGS_KEY, product)
-            }
-            val fragment = EditProductFragment()
-            fragment.arguments = args
-            return fragment
-        }
     }
 }

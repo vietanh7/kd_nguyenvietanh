@@ -1,7 +1,6 @@
 package com.test.demo.data.repo
 
 import com.test.demo.data.ThrottleHelper
-import com.test.demo.data.db.AppDb
 import com.test.demo.data.db.product.ProductDao
 import com.test.demo.data.db.product.ProductEntity
 import com.test.demo.data.remote.api.ApiConstants

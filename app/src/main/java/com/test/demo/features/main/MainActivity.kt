@@ -32,13 +32,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavController.OnDestin
     lateinit var prefsHelper: PrefsHelper
 
     private val navController
-        get() = findNavController(R.id.fragment_container)
+        get() = findNavController(R.id.nav_host)
 
     private val navHostFragment
         get() = supportFragmentManager.findFragmentById(navHostId) as NavHostFragment
 
     override val navHostId: Int
-        get() = R.id.fragment_container
+        get() = R.id.nav_host
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

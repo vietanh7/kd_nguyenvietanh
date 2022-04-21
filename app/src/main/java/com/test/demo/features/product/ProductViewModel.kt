@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.test.demo.data.remote.model.Product
 import com.test.demo.data.repo.ProductRepo
 import com.test.demo.features.base.BaseViewModel
-import com.test.demo.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -21,7 +20,6 @@ class ProductViewModel @Inject constructor(private val repo: ProductRepo) : Base
 
     private val listProduct = MutableStateFlow(emptyList<Product>())
     val listProductLiveData = listProduct.asLiveData()
-    val needReload = SingleLiveEvent(true)
 
     private val productState = MutableStateFlow(Product.empty())
     val productStateLiveData = productState.asLiveData()

@@ -5,7 +5,7 @@
     android:paddingHorizontal="4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
-        android:id="@+id/label1"
+        android:id="@+id/sku_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -16,22 +16,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/label2"
+        android:id="@+id/name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:text="@string/product_name"
-        app:layout_constraintBaseline_toBaselineOf="@+id/label1"
+        app:layout_constraintBaseline_toBaselineOf="@+id/sku_label"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toStartOf="@+id/guideline5" />
 
     <TextView
-        android:id="@+id/label3"
+        android:id="@+id/action_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/action"
         android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@+id/label1"
+        app:layout_constraintBaseline_toBaselineOf="@+id/sku_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline4" />
 

@@ -38,7 +38,7 @@ open class AddProductFragment :
             productUnit.doAfterTextChanged { updateState { copy(unit = it.toStringOrEmpty()) } }
             productStatus.doAfterTextChanged { updateState { copy(status = it.toString().toIntOr(1)) } }
 
-            btnAdd.setOnClickListener { viewModel.addProduct() }
+            actionBtn.setOnClickListener { viewModel.addProduct() }
         }
     }
 
@@ -62,8 +62,10 @@ open class AddProductFragment :
 
 
     override fun handleLoading(isLoading: Boolean) {
-        binding.progressBar.isInvisible = !isLoading
-        binding.btnAdd.isEnabled = !isLoading
+        with(binding) {
+            progressBar.isInvisible = !isLoading
+            actionBtn.isEnabled = !isLoading
+        }
     }
 
     override fun onNewEvent(event: Event) {
@@ -74,12 +76,6 @@ open class AddProductFragment :
             }
 
             else -> super.onNewEvent(event)
-        }
-    }
-
-    companion object {
-        fun newInstance(): AddProductFragment {
-            return AddProductFragment()
         }
     }
 }

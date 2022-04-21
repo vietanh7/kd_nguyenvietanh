@@ -15,11 +15,11 @@ class ProductHeaderAdapter: RecyclerView.Adapter<ProductHeaderAdapter.HeaderVH>(
 
     override fun onBindViewHolder(holder: HeaderVH, position: Int) = Unit
 
-    class HeaderVH(itemView: View): RecyclerView.ViewHolder(itemView) {
-
-    }
-
     override fun getItemCount(): Int {
         return 1
+    }
+
+    class HeaderVH(itemView: View): RecyclerView.ViewHolder(itemView) {
+
     }
 }

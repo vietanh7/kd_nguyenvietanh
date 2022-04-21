@@ -81,14 +81,16 @@ class ProductListFragment: BaseFragment<ProductListFragmentBinding, ProductViewM
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        val searchView = menu.findItem(R.id.search_menu).actionView as? SearchView ?: return
-        searchView.maxWidth = Int.MAX_VALUE
-        searchView.setOnQueryTextListener(this)
-        searchView.setOnQueryTextFocusChangeListener { _, b ->
-            if (b) {
-                binding.toolbar.title = ""
-            } else {
-                binding.toolbar.title = getString(R.string.product_list_title)
+        val searchView = menu.findItem(R.id.search_menu).actionView as? SearchView
+        searchView?.apply {
+            maxWidth = Int.MAX_VALUE
+            setOnQueryTextListener(this@ProductListFragment)
+            setOnQueryTextFocusChangeListener { _, b ->
+                if (b) {
+                    binding.toolbar.title = ""
+                } else {
+                    binding.toolbar.title = getString(R.string.product_list_title)
+                }
             }
         }
     }

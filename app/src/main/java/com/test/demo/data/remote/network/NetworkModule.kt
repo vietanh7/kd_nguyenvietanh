@@ -32,9 +32,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson {
-        return Gson()
-    }
+    fun provideGson() = Gson()
 
     @Provides
     @Singleton
