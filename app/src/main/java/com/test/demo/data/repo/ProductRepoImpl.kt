@@ -1,28 +1,18 @@
 package com.test.demo.data.repo
 
 import com.test.demo.data.ThrottleHelper
-import com.test.demo.data.db.product.ProductDao
-import com.test.demo.data.db.product.ProductEntity
 import com.test.demo.data.api.common.ApiConstants
-import com.test.demo.data.api.common.ApiError
 import com.test.demo.data.api.model.Product
 import com.test.demo.data.api.product.ProductApi
+import com.test.demo.data.db.product.ProductDao
+import com.test.demo.data.db.product.ProductEntity
+import com.test.demo.product.domain.ProductRepo
+import com.test.demo.utils.mapList
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
-
-interface ProductRepo {
-    fun getListProduct(force: Boolean = false): Single<List<Product>>
-
-    fun updateProduct(product: Product): Single<Product>
-
-    fun addProduct(product: Product): Single<Product>
-
-    fun deleteProduct(sku: String): Single<Product>
-
-    fun searchProduct(sku: String): Single<Product>
-}
 
 @Singleton
 class ProductRepoImpl @Inject constructor(
@@ -44,10 +34,14 @@ class ProductRepoImpl @Inject constructor(
         } else {
             productDao
                 .getAllProduct()
-                .map { entities -> entities.map { it.toProduct() } }
+                .mapList { it.toProduct() }
         }
 
         return resultSingle.subscribeOn(Schedulers.io())
+    }
+
+    override fun observeProducts(): Flowable<List<Product>> {
+        return productDao.observeProducts().mapList { it.toProduct() }
     }
 
     override fun updateProduct(product: Product): Single<Product> {
